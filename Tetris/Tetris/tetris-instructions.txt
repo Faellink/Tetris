@@ -1,0 +1,23 @@
+Segue as instruções para desenvolvimento do tetris.
+
+Criar um formulário que possua os seguintes componentes:
+--Botão para iniciar o jogo
+--Botão para resetar o jogo
+--Botão para pausar o jogo (as peças param de se movimentar)
+--Label para exibir a pontuação do jogador
+--Panel que será a área de movimentação das peças
+Cada peça deve ser uma UserControl diferente
+--Obrigatório a utilização de herança para criar os UserControls de cada peça
+Cada peça deve ter uma cor diferente para fácil identificação quando já estiver posicionada no tabuleiro
+O jogador deve conseguir manipular a direção que a peça se movimenta (esquerda e direita)
+O jogador deve conseguir girar a peça em 360º
+A peça não pode ultrapassar as laterais do tabuleiro de movimentação das peças
+A peça deve parar de se movimentar ao colidir com outras peças abaixo ou com o solo
+--Quando isso ocorrer, automaticamente uma nova peça deve começar a descer do topo do tabuleiro.
+--As próximas peças devem ser sorteada para não vir sempre a mesma forma.
+Caso o jogador consiga formar uma linha completa, essa linha deverá sumir e os pontos do jogador deverão ser contabilizados.
+--Quando isso ocorrer, as peças que estão acima devem ser deslocadas para baixo para preencher a linha que sumiu, nesse momento deve ser verificado novamente se há uma outra linha completa para executar os passos acima novamente (recursiva)
+--O jogador perde o jogo caso as peças atinjam o topo do tabuleiro de movimentação das Peças
+Deve existir um botão que o usuário possa salvar o jogo
+--Nesta ação deverá ser salvo o estado do jogo no banco de dados (SQL).
+Deve ser possível carregar um jogo salvo.
