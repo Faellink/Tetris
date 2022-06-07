@@ -38,13 +38,14 @@ namespace Tetris
                     TetrisUserControl tetrisUC = new TetrisUserControl();
 
                     userTC[i, j] = tetrisUC;
-                    
+                    tableLayoutPanel1.Controls.Add(tetrisUC,j,i);
                 }
             }
 
             foreach (TetrisUserControl t in userTC)
             {
-                
+                //tableLayoutPanel1.Controls.Add(TetrisUserControl, );
+                t.BackColor = Color.Black;
                 countCell++;
             }
 
@@ -73,15 +74,15 @@ namespace Tetris
             //[0 1 1 0]
             //[0 0 0 0]
 
-            int[,] testBlock = new int[4, 4] { {0,0,0,0 },{0,1,1,0},{0,1,1,0},{0,0,0,0 } };
+            //int[,] testBlock = new int[4, 4] { {0,0,0,0 },{0,1,1,0},{0,1,1,0},{0,0,0,0 } };
 
-            for (int i = 0; i < testBlock.GetLength(0); i++)
-            {
-                for (int j = 0; j < testBlock.GetLength(1); j++)
-                {
-                    boardGrid[i, j] = testBlock[i, j];
-                }
-            }
+            //for (int i = 0; i < testBlock.GetLength(0); i++)
+            //{
+            //    for (int j = 0; j < testBlock.GetLength(1); j++)
+            //    {
+            //        boardGrid[i, j] = testBlock[i, j];
+            //    }
+            //}
 
             //print board grid
             for (int i = 0; i < boardGrid.GetLength(0); i++)
