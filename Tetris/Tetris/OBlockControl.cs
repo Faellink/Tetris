@@ -12,9 +12,14 @@ namespace Tetris
 {
     public partial class OBlockControl : TetrisUserControl
     {
+
+        public int[,] blocks = new int[,] { { 0, 0, 0, 0 }, { 0, 2, 2, 0 }, { 0, 2, 2, 0 }, { 0, 0, 0, 0 } };
+
+
         public OBlockControl()
         {
             InitializeComponent();
+            this.BackColor = Color.Red;
         }
     }
 }
