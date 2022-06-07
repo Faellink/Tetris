@@ -10,12 +10,9 @@ using System.Windows.Forms;
 
 namespace Tetris
 {
-    public partial class TetrisUserControl : UserControl
+    public partial class OBlockControl : TetrisUserControl
     {
-
-        public int userControlIndex = 0;
-
-        public TetrisUserControl()
+        public OBlockControl()
         {
             InitializeComponent();
         }
