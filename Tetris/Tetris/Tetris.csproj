@@ -54,6 +54,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OBlock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OBlock.Designer.cs">
+      <DependentUpon>OBlock.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tetris.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,6 +74,9 @@
     <Compile Include="TetrisUserControl.Designer.cs">
       <DependentUpon>TetrisUserControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="OBlock.resx">
+      <DependentUpon>OBlock.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Tetris.resx">
       <DependentUpon>Tetris.cs</DependentUpon>
     </EmbeddedResource>

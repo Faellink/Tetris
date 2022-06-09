@@ -1,7 +1,7 @@
 ﻿
 namespace Tetris
 {
-    partial class TetrisUserControl
+    partial class OBlock
     {
         /// <summary> 
         /// Required designer variable.
@@ -31,13 +31,12 @@ namespace Tetris
         {
             this.SuspendLayout();
             // 
-            // TetrisUserControl
+            // OBlock
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
-            this.Name = "TetrisUserControl";
-            this.Size = new System.Drawing.Size(296, 233);
+            this.BackColor = System.Drawing.Color.Yellow;
+            this.Name = "OBlock";
             this.ResumeLayout(false);
 
         }

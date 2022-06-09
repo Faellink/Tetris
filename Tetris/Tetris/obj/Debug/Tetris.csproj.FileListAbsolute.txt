@@ -34,3 +34,4 @@ C:\Users\leoncioraf\Documents\Sequor - Desafios\Git\Sequor-tetris\Sequor-Tetris\
 C:\Users\leoncioraf\Documents\Sequor - Desafios\Git\Sequor-tetris\Sequor-Tetris\Tetris\Tetris\bin\Debug\ru\DevExpress.Pdf.v19.2.Core.resources.dll
 C:\Users\leoncioraf\Documents\Sequor - Desafios\Git\Sequor-tetris\Sequor-Tetris\Tetris\Tetris\obj\Debug\Tetris.TetrisUserControl.resources
 C:\Users\leoncioraf\Documents\Sequor - Desafios\Git\Sequor-tetris\Sequor-Tetris\Tetris\Tetris\obj\Debug\Tetris.csproj.CopyComplete
+C:\Users\leoncioraf\Documents\Sequor - Desafios\Git\Sequor-tetris\Sequor-Tetris\Tetris\Tetris\obj\Debug\Tetris.OBlock.resources
