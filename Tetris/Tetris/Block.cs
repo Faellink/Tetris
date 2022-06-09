@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Tetris
 {
-    public partial class TetrisUserControl : UserControl
+    public partial class Block : UserControl
     {
-        public TetrisUserControl()
+        public Block()
         {
             InitializeComponent();
         }
