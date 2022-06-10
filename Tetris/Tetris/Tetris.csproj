@@ -60,6 +60,12 @@
     <Compile Include="Block.Designer.cs">
       <DependentUpon>Block.cs</DependentUpon>
     </Compile>
+    <Compile Include="OBlock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OBlock.Designer.cs">
+      <DependentUpon>OBlock.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tetris.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +76,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Block.resx">
       <DependentUpon>Block.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OBlock.resx">
+      <DependentUpon>OBlock.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tetris.resx">
       <DependentUpon>Tetris.cs</DependentUpon>

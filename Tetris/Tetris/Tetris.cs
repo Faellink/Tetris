@@ -13,15 +13,47 @@ namespace Tetris
     public partial class TetrisForm : Form
     {
 
-        
+        public Block[,] grid = new Block[20, 10];
 
         public TetrisForm()
         {
             InitializeComponent();
 
-            
+            StartGrid();
         }
 
-        
+        public void StartGrid()
+        {
+            //20x10
+
+            for (int i = 0; i < 20; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    Block block = new Block();
+                    grid[i, j] = block;
+                    tableLayoutPanel1.Controls.Add(block,j,i);
+                }
+            }
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            int spawnPoit = 4;
+
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    OBlock oB = new OBlock();
+                    grid[i, j + spawnPoit] = oB; 
+                }
+            }
+
+            
+
+            Console.WriteLine("done");
+
+        }
     }
 }

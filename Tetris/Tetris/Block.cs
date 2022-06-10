@@ -12,6 +12,14 @@ namespace Tetris
 {
     public partial class Block : UserControl
     {
+
+        public int[,] dots = new int[4, 4];
+        public Color blockColor;
+        public int xPos;
+        public int yPos;
+        public int blockID;
+
+
         public Block()
         {
             InitializeComponent();
