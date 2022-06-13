@@ -24,9 +24,12 @@ namespace Tetris
         {
             InitializeComponent();
 
-            dots = new int[4, 4] { { 0, 0, 0, 0 }, { 0, 1, 1, 0 }, { 0, 1, 1, 0 }, { 0, 0, 0, 0 } };
-            blockColor = Color.Yellow;
-            blockID = 1;
+            //dots = new int[4, 4] { { 0, 0, 0, 0 }, { 0, 1, 1, 0 }, { 0, 1, 1, 0 }, { 0, 0, 0, 0 } };
+            //blockColor = Color.Yellow;
+            //blockID = 1;
+
+            BlockColor = Color.Yellow;
+
         }
     }
 }

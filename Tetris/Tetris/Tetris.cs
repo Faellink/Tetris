@@ -15,6 +15,8 @@ namespace Tetris
 
         public Block[,] grid = new Block[20, 10];
 
+        //public Point
+
         public TetrisForm()
         {
             InitializeComponent();
@@ -41,12 +43,14 @@ namespace Tetris
         {
             int spawnPoit = 4;
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 1; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
                     OBlock oB = new OBlock();
-                    grid[i, j + spawnPoit] = oB; 
+                    //grid[i, j + spawnPoit].BlockColor = Color.Yellow;
+                    var temp = grid[i, j + spawnPoit];
+                    temp.BackColor = Color.Red;
                 }
             }
 
