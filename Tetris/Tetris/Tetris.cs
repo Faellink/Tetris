@@ -13,7 +13,7 @@ namespace Tetris
     public partial class TetrisForm : Form
     {
 
-        private static BlockUserControl[] blocks = new BlockUserControl[] { new OBlock() };
+        private static BlockUserControl[] blocks = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(), new LBlock(), new JBlock(), new SBlock(), new ZBlock() };
 
         BlockUserControl currentBlock;
 
@@ -59,9 +59,9 @@ namespace Tetris
         {
             //var shape = ShapesHandler.GetRandomShape();
 
-            //var block = blocks[new Random().Next(blocks.Length)];
+            var block = blocks[new Random().Next(blocks.Length)];
 
-            var block = blocks[0];
+            //var block = blocks[0];
 
             // Calculate the x and y values as if the shape lies in the center
             currentX = 4;

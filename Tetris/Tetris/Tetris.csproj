@@ -52,7 +52,22 @@
     <Compile Include="BlockUserControl.Designer.cs">
       <DependentUpon>BlockUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="IBlock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="JBlock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LBlock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="OBlock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SBlock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TBlock.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Tetris.cs">
@@ -63,6 +78,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZBlock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <EmbeddedResource Include="Tetris.resx">
       <DependentUpon>Tetris.cs</DependentUpon>
     </EmbeddedResource>
