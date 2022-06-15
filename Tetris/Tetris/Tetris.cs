@@ -34,7 +34,7 @@ namespace Tetris
         Graphics graphics;
         int gridWidth = 10;
         int gridHeight = 20;
-        int[,] griDotArray;
+        int[,] gridDotArray;
         int dotSize = 20;
 
         private void LoadCanvas()
@@ -49,7 +49,7 @@ namespace Tetris
 
             picTetris.Image = bitmap;
 
-            griDotArray = new int[gridWidth,gridHeight];
+            gridDotArray = new int[gridHeight,gridWidth];
         }
 
         int currentX;
@@ -85,7 +85,7 @@ namespace Tetris
             {
                 for (int j = 0; j < currentBlock.BlockHeight; j++)
                 {
-                    if (newY + j > 0 && griDotArray[newX + i, newY + j] == 1 && currentBlock.BlockDots[j, i] == 1)
+                    if (newY + j > 0 && gridDotArray[newY + j, newX + i] == 1 && currentBlock.BlockDots[j, i] == 1)
                         return false;
                 }
             }
@@ -118,7 +118,7 @@ namespace Tetris
             picTetris.Image = workingBitmap;
         }
 
-        private void UpdateGRidDotArrayWithCurrentBlock()
+        private void UpdateGridDotArrayWithCurrentBlock()
         {
             for (int i = 0; i < currentBlock.BlockWidth; i++)
             {
@@ -128,7 +128,7 @@ namespace Tetris
                     {
                         BoolGameOver();
 
-                        griDotArray[currentX + i, currentY + j] = 1;
+                        gridDotArray[currentY + j, currentX + i] = 1;
                     }
                 }
             }
@@ -140,7 +140,7 @@ namespace Tetris
             {
                 timer1.Stop();
                 MessageBox.Show("Game Over");
-                Application.Restart();
+                //Application.Restart();
             }
         }
 
@@ -154,7 +154,7 @@ namespace Tetris
                 // copy working image into canvas image
                 bitmap = new Bitmap(workingBitmap);
 
-                UpdateGRidDotArrayWithCurrentBlock();
+                UpdateGridDotArrayWithCurrentBlock();
 
                 // get next shape
                 currentBlock = GetRandomBlock();
@@ -163,11 +163,11 @@ namespace Tetris
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < griDotArray.GetLength(0); i++)
+            for (int i = 0; i < gridDotArray.GetLength(0); i++)
             {
-                for (int j = 0; j < griDotArray.GetLength(1); j++)
+                for (int j = 0; j < gridDotArray.GetLength(1); j++)
                 {
-                    Console.Write(griDotArray[i, j]);
+                    Console.Write(gridDotArray[i, j]);
                 }
                 Console.WriteLine();
             }
