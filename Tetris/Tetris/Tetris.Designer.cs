@@ -34,9 +34,9 @@ namespace Tetris
             this.btnPause = new System.Windows.Forms.Button();
             this.lblScore = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.picTetris = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picTetris)).BeginInit();
             this.SuspendLayout();
             // 
             // btnStart
@@ -65,6 +65,7 @@ namespace Tetris
             this.btnPause.TabIndex = 3;
             this.btnPause.Text = "PAUSE";
             this.btnPause.UseVisualStyleBackColor = true;
+            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
             // 
             // lblScore
             // 
@@ -77,21 +78,20 @@ namespace Tetris
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.pictureBox1);
+            this.panel1.Controls.Add(this.picTetris);
             this.panel1.Location = new System.Drawing.Point(89, 28);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(205, 405);
+            this.panel1.Size = new System.Drawing.Size(200, 400);
             this.panel1.TabIndex = 5;
             // 
-            // pictureBox1
+            // picTetris
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(205, 405);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.picTetris.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.picTetris.Location = new System.Drawing.Point(0, 0);
+            this.picTetris.Name = "picTetris";
+            this.picTetris.Size = new System.Drawing.Size(200, 400);
+            this.picTetris.TabIndex = 0;
+            this.picTetris.TabStop = false;
             // 
             // TetrisForm
             // 
@@ -106,8 +106,7 @@ namespace Tetris
             this.Name = "TetrisForm";
             this.Text = "TETRIS";
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picTetris)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -119,7 +118,7 @@ namespace Tetris
         private System.Windows.Forms.Button btnPause;
         private System.Windows.Forms.Label lblScore;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox picTetris;
     }
 }
 

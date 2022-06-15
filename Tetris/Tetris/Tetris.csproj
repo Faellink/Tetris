@@ -46,6 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BlockUserControl.Designer.cs">
+      <DependentUpon>BlockUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OBlock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Tetris.cs">
       <SubType>Form</SubType>
     </Compile>
