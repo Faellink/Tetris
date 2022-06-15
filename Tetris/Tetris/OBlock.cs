@@ -18,7 +18,7 @@ namespace Tetris
                         {1,1},
                         {1,1}
             };
-            BlockColor = new SolidBrush(Color.Orange)
+            BlockColor = new SolidBrush(Color.Orange);
         }
     }
 }

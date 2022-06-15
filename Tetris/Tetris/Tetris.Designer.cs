@@ -29,12 +29,14 @@ namespace Tetris
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnRestart = new System.Windows.Forms.Button();
             this.btnPause = new System.Windows.Forms.Button();
             this.lblScore = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.picTetris = new System.Windows.Forms.PictureBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picTetris)).BeginInit();
             this.SuspendLayout();
@@ -119,6 +121,7 @@ namespace Tetris
         private System.Windows.Forms.Label lblScore;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox picTetris;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
