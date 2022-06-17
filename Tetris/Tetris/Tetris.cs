@@ -206,18 +206,23 @@ namespace Tetris
             Console.WriteLine("/////////");
         }
 
-
+        private void MoveLeftRight(int moveLeftRight)
+        {
+            MoveBlockIfPossible(moveSide: moveLeftRight);
+        }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == Keys.Right)
             {
                 Console.WriteLine("right");
+                MoveLeftRight(1);
                 return true;
             }
             if (keyData == Keys.Left)
             {
                 Console.WriteLine("left");
+                MoveLeftRight(-1);
                 return true;
             }
             if (keyData == Keys.Up)
