@@ -55,7 +55,7 @@ namespace Tetris
             gridDotArray = new int[gridHeight,gridWidth];
         }
 
-        private void ShuffleBlocksArray(BlockUserControl[] blocks)
+        private BlockUserControl[] ShuffleBlocksArray(BlockUserControl[] blocks)
         {
             Random random = new Random();
 
@@ -74,6 +74,8 @@ namespace Tetris
                 Console.WriteLine(sBlock.ToString());
             }
             Console.WriteLine("//////////////");
+
+            return shuffledBlock;
         }
 
         int currentX;
@@ -84,9 +86,9 @@ namespace Tetris
         {
             //var shape = ShapesHandler.GetRandomShape();
 
-            var block = shuffledBlock[new Random().Next(shuffledBlock.Length)];
+            //var block = shuffledBlock[new Random().Next(shuffledBlock.Length)];
 
-            //var block = blocks[0];
+            var block = shuffledBlock[blocksGenerated];
 
             // Calculate the x and y values as if the shape lies in the center
             currentX = 4;
@@ -97,6 +99,7 @@ namespace Tetris
             if (blocksGenerated==7)
             {
                 ShuffleBlocksArray(shuffledBlock);
+                blocksGenerated = 0;
             }
 
             return block;
@@ -211,6 +214,11 @@ namespace Tetris
             MoveBlockIfPossible(moveSide: moveLeftRight);
         }
 
+        private void MoveDown(int dropPiece)
+        {
+            MoveBlockIfPossible(moveDown: dropPiece);
+        }
+
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == Keys.Right)
@@ -233,6 +241,7 @@ namespace Tetris
             if (keyData == Keys.Down)
             {
                 Console.WriteLine("down");
+                MoveDown(1);
                 return true;
             }
 
