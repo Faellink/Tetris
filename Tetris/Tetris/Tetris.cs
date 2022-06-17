@@ -61,7 +61,7 @@ namespace Tetris
 
             Array.Copy(blocks, shuffledBlock, blocks.Length);
 
-            for (int i = shuffledBlock.Count() - 1; i > 0; i--)
+            for (int i = shuffledBlock.Length - 1; i > 0; i--)
             {
                 int j = random.Next(i + 1);
                 var temp = shuffledBlock[i];
@@ -204,6 +204,34 @@ namespace Tetris
                 Console.WriteLine();
             }
             Console.WriteLine("/////////");
+        }
+
+
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Right)
+            {
+                Console.WriteLine("right");
+                return true;
+            }
+            if (keyData == Keys.Left)
+            {
+                Console.WriteLine("left");
+                return true;
+            }
+            if (keyData == Keys.Up)
+            {
+                Console.WriteLine("up");
+                return true;
+            }
+            if (keyData == Keys.Down)
+            {
+                Console.WriteLine("down");
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }
