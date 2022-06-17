@@ -15,6 +15,8 @@ namespace Tetris
 
         private static BlockUserControl[] blocks = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(), new LBlock(), new JBlock(), new SBlock(), new ZBlock() };
 
+        private static BlockUserControl[] shuffledBlock = new BlockUserControl[7];
+
         BlockUserControl currentBlock;
 
         public TetrisForm()
@@ -22,6 +24,7 @@ namespace Tetris
             InitializeComponent();
             LoadCanvas();
 
+            ShuffleBlocksArray(blocks);
             currentBlock = GetRandomBlock();
 
             timer1.Tick += TimerTick;
@@ -52,20 +55,49 @@ namespace Tetris
             gridDotArray = new int[gridHeight,gridWidth];
         }
 
+        private void ShuffleBlocksArray(BlockUserControl[] blocks)
+        {
+            Random random = new Random();
+
+            Array.Copy(blocks, shuffledBlock, blocks.Length);
+
+            for (int i = shuffledBlock.Count() - 1; i > 0; i--)
+            {
+                int j = random.Next(i + 1);
+                var temp = shuffledBlock[i];
+                shuffledBlock[i] = shuffledBlock[j];
+                shuffledBlock[j] = temp;
+            }
+
+            foreach (BlockUserControl sBlock in shuffledBlock)
+            {
+                Console.WriteLine(sBlock.ToString());
+            }
+            Console.WriteLine("//////////////");
+        }
+
         int currentX;
         int currentY;
+        int blocksGenerated = 0;
 
         private BlockUserControl GetRandomBlock()
         {
             //var shape = ShapesHandler.GetRandomShape();
 
-            var block = blocks[new Random().Next(blocks.Length)];
+            var block = shuffledBlock[new Random().Next(shuffledBlock.Length)];
 
             //var block = blocks[0];
 
             // Calculate the x and y values as if the shape lies in the center
             currentX = 4;
             currentY = -block.BlockHeight;
+
+            blocksGenerated++;
+
+            if (blocksGenerated==7)
+            {
+                ShuffleBlocksArray(shuffledBlock);
+            }
 
             return block;
         }
