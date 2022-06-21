@@ -13,9 +13,12 @@ namespace Tetris
     public partial class TetrisForm : Form
     {
 
-        private static BlockUserControl[] blocks = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(), new LBlock(), new JBlock(), new SBlock(), new ZBlock() };
+        //private static BlockUserControl[] blocks = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(), new LBlock(), new JBlock(), new SBlock(), new ZBlock() };
 
-        private static BlockUserControl[] shuffledBlock = new BlockUserControl[7];
+        private static BlockUserControl[] blocks = new BlockUserControl[] { new TBlock()};
+
+
+        private static BlockUserControl[] shuffledBlock = new BlockUserControl[blocks.Length];
 
         BlockUserControl currentBlock;
 
@@ -236,6 +239,7 @@ namespace Tetris
             if (keyData == Keys.Up)
             {
                 Console.WriteLine("up");
+                currentBlock.RotateBlock();
                 return true;
             }
             if (keyData == Keys.Down)
