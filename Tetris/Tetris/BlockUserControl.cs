@@ -21,7 +21,9 @@ namespace Tetris
 
         public int[][,] BlockRotations;
 
-        static int rotationState = 0;
+        private static int rotationState = 0;
+
+        public int RotationState { get; set; }
 
         public BlockUserControl()
         {
@@ -40,12 +42,12 @@ namespace Tetris
                 rotationState = 0;
             }
 
-            Console.WriteLine(rotationState);
+            //Console.WriteLine(rotationState);
 
-            foreach (int i in BlockRotations[rotationState])
-            {
-                Console.Write(i.ToString());
-            }
+            //foreach (int i in BlockRotations[rotationState])
+            //{
+            //    Console.Write(i.ToString());
+            //}
 
             var temp = BlockHeight;
             BlockHeight = BlockWidth;
@@ -55,8 +57,15 @@ namespace Tetris
 
             BlockDots = BlockRotations[rotationState];
             
-            Console.WriteLine();
+            //Console.WriteLine();
             
+        }
+
+        public void ResetRotation()
+        {
+            rotationState = 0;
+            BlockDots = new int[BlockWidth, BlockHeight];
+            BlockDots = BlockRotations[0];
         }
     }
 }

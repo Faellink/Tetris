@@ -13,12 +13,12 @@ namespace Tetris
     public partial class TetrisForm : Form
     {
 
-        //private static BlockUserControl[] blocks = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(), new LBlock(), new JBlock(), new SBlock(), new ZBlock() };
+        private static BlockUserControl[] blocks = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(), new LBlock(), new JBlock(), new SBlock(), new ZBlock() };
 
-        private static BlockUserControl[] blocks = new BlockUserControl[] { new TBlock()};
+        //private static BlockUserControl[] blocks = new BlockUserControl[] { new TBlock()};
 
 
-        private static BlockUserControl[] shuffledBlock = new BlockUserControl[blocks.Length];
+        private static BlockUserControl[] shuffledBlock = new BlockUserControl[7];
 
         BlockUserControl currentBlock;
 
@@ -93,6 +93,8 @@ namespace Tetris
 
             var block = shuffledBlock[blocksGenerated];
 
+            
+
             // Calculate the x and y values as if the shape lies in the center
             currentX = 4;
             currentY = -block.BlockHeight;
@@ -105,6 +107,11 @@ namespace Tetris
                 blocksGenerated = 0;
             }
 
+            //Console.WriteLine(shuffledBlock[blocksGenerated + 1]);
+
+
+            block.ResetRotation();
+            Console.WriteLine("Rotation State: "+ block.RotationState);
             return block;
         }
 
@@ -226,25 +233,25 @@ namespace Tetris
         {
             if (keyData == Keys.Right)
             {
-                Console.WriteLine("right");
+                //Console.WriteLine("right");
                 MoveLeftRight(1);
                 return true;
             }
             if (keyData == Keys.Left)
             {
-                Console.WriteLine("left");
+                //Console.WriteLine("left");
                 MoveLeftRight(-1);
                 return true;
             }
             if (keyData == Keys.Up)
             {
-                Console.WriteLine("up");
+                //Console.WriteLine("up");
                 currentBlock.RotateBlock();
                 return true;
             }
             if (keyData == Keys.Down)
             {
-                Console.WriteLine("down");
+                //Console.WriteLine("down");
                 MoveDown(1);
                 return true;
             }

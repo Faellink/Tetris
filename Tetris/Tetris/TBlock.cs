@@ -44,6 +44,7 @@ namespace Tetris
                     }
             };
             BlockColor = new SolidBrush(Color.Purple);
+            
         }
     }
 }

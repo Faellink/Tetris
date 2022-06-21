@@ -18,6 +18,31 @@ namespace Tetris
                         { 0, 1, 1 },
                         { 1, 1, 0 }
                     };
+            BlockRotations = new int[][,]
+            {
+                new int[,]
+                    {
+                        { 0, 1, 1 },
+                        { 1, 1, 0 }
+                    },
+                new int[,]
+                    {
+                        { 1, 0},
+                        { 1, 1},
+                        { 0, 1}
+                    },
+                new int[,]
+                    {
+                        { 0, 1, 1 },
+                        { 1, 1, 0 }
+                    },
+                new int[,]
+                   {
+                       { 1, 0},
+                       { 1, 1},
+                       { 0, 1}
+                   }
+            };
             BlockColor = new SolidBrush(Color.Red);
         }
     }
