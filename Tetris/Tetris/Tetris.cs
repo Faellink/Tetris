@@ -13,9 +13,11 @@ namespace Tetris
     public partial class TetrisForm : Form
     {
 
-        private static BlockUserControl[] blocks = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(), new LBlock(), new JBlock(), new SBlock(), new ZBlock() };
+        //private static BlockUserControl[] blocks = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(), new LBlock(), new JBlock(), new SBlock(), new ZBlock() };
 
-        private static BlockUserControl[] shuffledBlock = new BlockUserControl[7];
+        private static BlockUserControl[] blocks = new BlockUserControl[] { new TBlock()};
+
+        private static BlockUserControl[] shuffledBlock = new BlockUserControl[blocks.Length];
 
         BlockUserControl currentBlock;
 
@@ -88,7 +90,9 @@ namespace Tetris
 
             //var block = shuffledBlock[new Random().Next(shuffledBlock.Length)];
 
-            var block = shuffledBlock[blocksGenerated];
+            //var block = shuffledBlock[blocksGenerated];
+
+            var block = blocks[0];
 
             // Calculate the x and y values as if the shape lies in the center
             currentX = 4;
@@ -141,9 +145,9 @@ namespace Tetris
             workingBitmap = new Bitmap(bitmap);
             workingGraphics = Graphics.FromImage(workingBitmap);
 
-            for (int i = 0; i < currentBlock.BlockWidth; i++)
+            for (int i = 0; i < currentBlock.BlockDots.GetLength(1); i++)
             {
-                for (int j = 0; j < currentBlock.BlockHeight; j++)
+                for (int j = 0; j < currentBlock.BlockDots.GetLength(0); j++)
                 {
                     if (currentBlock.BlockDots[j, i] != 0)
                         workingGraphics.FillRectangle(currentBlock.BlockColor, (currentX + i) * dotSize, (currentY + j) * dotSize, dotSize, dotSize);
@@ -236,6 +240,8 @@ namespace Tetris
             if (keyData == Keys.Up)
             {
                 Console.WriteLine("up");
+                currentBlock.RotateBlock();
+                DrawBlock();
                 return true;
             }
             if (keyData == Keys.Down)
