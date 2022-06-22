@@ -21,6 +21,10 @@ namespace Tetris
 
         public int BlockID;
 
+        public int[][,] BlockRotations;
+
+        public static int rotationState;
+
         public BlockUserControl()
         {
             InitializeComponent();
