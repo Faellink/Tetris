@@ -18,6 +18,7 @@ namespace Tetris
                        {0,0,1 },
                        {1,1,1 }
                     };
+            BlockID = 4;
             BlockColor = new SolidBrush(Color.LightGreen);
         }
     }

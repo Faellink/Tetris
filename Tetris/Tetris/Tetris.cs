@@ -120,7 +120,7 @@ namespace Tetris
             {
                 for (int j = 0; j < currentBlock.BlockHeight; j++)
                 {
-                    if (newY + j > 0 && gridDotArray[newY + j, newX + i] == 1 && currentBlock.BlockDots[j, i] == 1)
+                    if (newY + j > 0 && gridDotArray[newY + j, newX + i] != 0 && currentBlock.BlockDots[j, i] != 0)
                         return false;
                 }
             }
@@ -145,7 +145,7 @@ namespace Tetris
             {
                 for (int j = 0; j < currentBlock.BlockHeight; j++)
                 {
-                    if (currentBlock.BlockDots[j, i] == 1)
+                    if (currentBlock.BlockDots[j, i] != 0)
                         workingGraphics.FillRectangle(currentBlock.BlockColor, (currentX + i) * dotSize, (currentY + j) * dotSize, dotSize, dotSize);
                 }
             }
@@ -159,11 +159,11 @@ namespace Tetris
             {
                 for (int j = 0; j < currentBlock.BlockHeight; j++)
                 {
-                    if (currentBlock.BlockDots[j, i] == 1)
+                    if (currentBlock.BlockDots[j, i] != 0)
                     {
                         BoolGameOver();
 
-                        gridDotArray[currentY + j, currentX + i] = 1;
+                        gridDotArray[currentY + j, currentX + i] = currentBlock.BlockID;
                     }
                 }
             }

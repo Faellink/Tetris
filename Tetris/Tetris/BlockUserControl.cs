@@ -19,6 +19,8 @@ namespace Tetris
 
         public Brush BlockColor;
 
+        public int BlockID;
+
         public BlockUserControl()
         {
             InitializeComponent();
