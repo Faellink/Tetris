@@ -173,6 +173,92 @@ namespace Tetris
             }
         }
 
+        public void CheckRows()
+        {
+            int sum = 0;
+
+            int fullRows = 0;
+
+            for (int i = 0; i < gridHeight; i++)
+            {
+                for (int j = 0; j < gridWidth; j++)
+                {
+                    if (gridDotArray[i, j] != 0)
+                    {
+                        sum++;
+
+                        
+
+                        if (sum == 10)
+                        {
+                            fullRows++;
+                            Console.WriteLine($"Row{i} sum is full");
+
+                            for (int k = 0; k < gridWidth; k++)
+                            {
+                                gridDotArray[i, k] = 0;
+                            }
+                        }
+                    }
+                }
+
+                
+
+                //Console.WriteLine($"Row{i} sum is {sum}");
+
+                sum = 0;
+                //fullRows = 0;
+            }
+
+            PrintGridDotArray();
+
+            UpdateBitmap();
+        }
+
+
+        public void UpdateBitmap()
+        {
+            for (int i = 0; i < gridWidth; i++)
+            {
+                for (int j = 0; j < gridHeight; j++)
+                {
+
+                    graphics = Graphics.FromImage(bitmap);
+
+                    switch (gridDotArray[j,i])
+                    {
+                        case 1:
+                            graphics.FillRectangle(Brushes.Blue,i * dotSize, j * dotSize, dotSize, dotSize);
+                            break;
+                        case 2:
+                            graphics.FillRectangle(Brushes.Orange, i * dotSize, j * dotSize, dotSize, dotSize);
+                            break;
+                        case 3:
+                            graphics.FillRectangle(Brushes.Purple, i * dotSize, j * dotSize, dotSize, dotSize);
+                            break;
+                        case 4:
+                            graphics.FillRectangle(Brushes.LightGreen, i * dotSize, j * dotSize, dotSize, dotSize);
+                            break;
+                        case 5:
+                            graphics.FillRectangle(Brushes.DarkGreen, i * dotSize, j * dotSize, dotSize, dotSize);
+                            break;
+                        case 6:
+                            graphics.FillRectangle(Brushes.Red, i * dotSize, j * dotSize, dotSize, dotSize);
+                            break;
+                        case 7:
+                            graphics.FillRectangle(Brushes.Salmon, i * dotSize, j * dotSize, dotSize, dotSize);
+                            break;
+                        default:
+                            graphics.FillRectangle(Brushes.Black, i * dotSize, j * dotSize, dotSize, dotSize);
+                            break;
+                    }
+                }
+            }
+
+            picTetris.Image = bitmap;
+        }
+
+
         private void BoolGameOver()
         {
             if (currentY < 0)
@@ -197,20 +283,14 @@ namespace Tetris
 
                 // get next shape
                 currentBlock = GetRandomBlock();
+
+                CheckRows();
             }
         }
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < gridDotArray.GetLength(0); i++)
-            {
-                for (int j = 0; j < gridDotArray.GetLength(1); j++)
-                {
-                    Console.Write(gridDotArray[i, j]);
-                }
-                Console.WriteLine();
-            }
-            Console.WriteLine("/////////");
+            PrintGridDotArray();
         }
 
         private void MoveLeftRight(int moveLeftRight)
@@ -227,31 +307,44 @@ namespace Tetris
         {
             if (keyData == Keys.Right)
             {
-                Console.WriteLine("right");
+                //Console.WriteLine("right");
                 MoveLeftRight(1);
                 return true;
             }
             if (keyData == Keys.Left)
             {
-                Console.WriteLine("left");
+                //Console.WriteLine("left");
                 MoveLeftRight(-1);
                 return true;
             }
             if (keyData == Keys.Up)
             {
-                Console.WriteLine("up");
+                //Console.WriteLine("up");
                 currentBlock.RotateBlock();
                 DrawBlock();
                 return true;
             }
             if (keyData == Keys.Down)
             {
-                Console.WriteLine("down");
+                //Console.WriteLine("down");
                 MoveDown(1);
                 return true;
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        public void PrintGridDotArray()
+        {
+            for (int i = 0; i < gridDotArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < gridDotArray.GetLength(1); j++)
+                {
+                    Console.Write(gridDotArray[i, j]);
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("/////////");
         }
     }
 }
