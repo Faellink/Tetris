@@ -87,5 +87,14 @@ namespace Tetris
             //Console.WriteLine(BlockDots);
 
         }
+
+        public void RollbackBlock()
+        {
+            BlockDots = roolbackDots;
+
+            var temp = BlockWidth;
+            BlockWidth = BlockHeight;
+            BlockHeight = temp;
+        }
     }
 }
