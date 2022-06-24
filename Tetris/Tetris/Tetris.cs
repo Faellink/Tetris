@@ -175,39 +175,22 @@ namespace Tetris
 
         public void CheckRows()
         {
-            int sum = 0;
+            int clearedRows = 0;
 
-            int fullRows = 0;
-
-            for (int i = 0; i < gridHeight; i++)
+            for (int i = gridHeight-1; i >= 0 ; i--)
             {
-                for (int j = 0; j < gridWidth; j++)
+                //Console.WriteLine($"Row {i}");
+                //check row
+                if (CheckRowFull(i))
                 {
-                    if (gridDotArray[i, j] != 0)
-                    {
-                        sum++;
-
-                        
-
-                        if (sum == 10)
-                        {
-                            fullRows++;
-                            Console.WriteLine($"Row{i} sum is full");
-
-                            for (int k = 0; k < gridWidth; k++)
-                            {
-                                gridDotArray[i, k] = 0;
-                            }
-                        }
-                    }
+                    //Console.WriteLine($"Row {i} is full");
+                    ClearRow(i);
+                    clearedRows++;
+                }else if (clearedRows>0)
+                {
+                    //Console.WriteLine(clearedRows);
+                    MoveRowDown(i, clearedRows);
                 }
-
-                
-
-                //Console.WriteLine($"Row{i} sum is {sum}");
-
-                sum = 0;
-                //fullRows = 0;
             }
 
             PrintGridDotArray();
@@ -215,6 +198,39 @@ namespace Tetris
             UpdateBitmap();
         }
 
+        private void MoveRowDown(int i, int clearedRows)
+        {
+            for (int j = 0; j < gridWidth; j++)
+            {
+                //Console.WriteLine($"To move row{i}");
+                gridDotArray[i + clearedRows, j] = gridDotArray[i, j];
+                //gridDotArray[i, j] = 0;
+
+                //grid[r + numRows, c] = grid[r, c];
+                //grid[r, c] = 0;
+
+            }
+        }
+
+        private void ClearRow(int i)
+        {
+            for (int j = 0; j < gridWidth; j++)
+            {
+                gridDotArray[i, j] = 0;
+            }
+        }
+
+        private bool CheckRowFull(int i)
+        {
+            for (int j = 0; j < gridWidth; j++)
+            {
+                if (gridDotArray[i,j] == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         public void UpdateBitmap()
         {
