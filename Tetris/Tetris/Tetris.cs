@@ -29,6 +29,8 @@ namespace Tetris
             ShuffleBlocksArray(blocks);
             currentBlock = GetRandomBlock();
 
+            this.ActiveControl = null;
+
             timer1.Tick += TimerTick;
             timer1.Interval = 500;
             timer1.Start();
@@ -167,7 +169,11 @@ namespace Tetris
                     {
                         BoolGameOver();
 
-                        gridDotArray[currentY + j, currentX + i] = currentBlock.BlockID;
+                        if (gameover == false)
+                        {
+                            gridDotArray[currentY + j, currentX + i] = currentBlock.BlockID;
+                        }
+                        //gridDotArray[currentY + j, currentX + i] = currentBlock.BlockID;
                     }
                 }
             }
@@ -274,7 +280,7 @@ namespace Tetris
             picTetris.Image = bitmap;
         }
 
-
+        public bool gameover = false;
         private void BoolGameOver()
         {
             if (currentY < 0)
@@ -282,7 +288,10 @@ namespace Tetris
                 timer1.Stop();
                 MessageBox.Show("Game Over");
                 //Application.Restart();
+                //Application.Exit();
+                gameover = true;
             }
+
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -321,33 +330,64 @@ namespace Tetris
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == Keys.Right)
+
+
+            var verticalMove = 0;
+            var horizontalMove = 0;
+
+            // calculate the vertical and horizontal move values
+            // based on the key pressed
+            switch (keyData)
             {
-                //Console.WriteLine("right");
-                MoveLeftRight(1);
-                return true;
-            }
-            if (keyData == Keys.Left)
-            {
-                //Console.WriteLine("left");
-                MoveLeftRight(-1);
-                return true;
-            }
-            if (keyData == Keys.Up)
-            {
-                //Console.WriteLine("up");
-                currentBlock.RotateBlock();
-                DrawBlock();
-                return true;
-            }
-            if (keyData == Keys.Down)
-            {
-                //Console.WriteLine("down");
-                MoveDown(1);
-                return true;
+                // move shape left
+                case Keys.Left:
+                    verticalMove--;
+                    break;
+
+                // move shape right
+                case Keys.Right:
+                    verticalMove++;
+                    break;
+
+                // move shape down faster
+                case Keys.Down:
+                    horizontalMove++;
+                    break;
+
+                // rotate the shape clockwise
+                case Keys.Up:
+                    currentBlock.RotateBlock();
+                    break;
+                default:
+                    return base.ProcessCmdKey(ref msg, keyData);
             }
 
+            var isMoveSuccess = MoveBlockIfPossible(horizontalMove, verticalMove);
+
+            // if the player was trying to rotate the shape, but
+            // that move was not possible - rollback the shape
+            if (!isMoveSuccess && keyData == Keys.Up)
+                currentBlock.RollbackBlock();
+
+
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void PlaceHolderRotation()
+        {
+            var isMoveSucces = MoveBlockIfPossible(0,0);
+
+            if (!isMoveSucces)
+            {
+                Console.WriteLine("no");
+            }
+            else
+            {
+                Console.WriteLine("yes");
+            }
+
+            //currentBlock.RotateBlock();
+            //DrawBlock();
         }
 
         public void PrintGridDotArray()
