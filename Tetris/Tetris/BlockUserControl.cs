@@ -21,11 +21,7 @@ namespace Tetris
 
         public int BlockID;
 
-        public int[][,] BlockRotations;
-
         public int[,] roolbackDots;
-
-        public static int rotationState;
 
         public BlockUserControl()
         {
@@ -34,29 +30,6 @@ namespace Tetris
 
         public void RotateBlock()
         {
-            //if (rotationState<3)
-            //{
-            //    rotationState++;
-            //}
-            //else
-            //{
-            //    rotationState = 0;
-            //}
-
-
-            ////2x3
-            //if (rotationState%2==0)
-            //{
-            //    //par
-            //    BlockDots = new int[BlockWidth,BlockHeight];
-            //}
-            //else
-            //{
-            //    //impar
-            //    BlockDots = new int[BlockHeight, BlockWidth];
-
-            //}
-
             roolbackDots = BlockDots;
 
             BlockDots = new int[BlockWidth, BlockHeight];
@@ -71,20 +44,6 @@ namespace Tetris
             var temp = BlockWidth;
             BlockWidth = BlockHeight;
             BlockHeight = temp;
-
-            //BlockDots = new int[BlockWidth, BlockHeight];
-
-            //BlockDots = BlockRotations[rotationState];
-
-            //for (int i = 0; i < BlockDots.GetLength(0); i++)
-            //{
-            //    for (int j = 0; j < BlockDots.GetLength(1); j++)
-            //    {
-            //        BlockDots[i, j] = BlockRotations[rotationState][i, j];
-            //    }
-            //}
-
-            //Console.WriteLine(BlockDots);
 
         }
 

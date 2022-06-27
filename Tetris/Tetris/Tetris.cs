@@ -15,8 +15,6 @@ namespace Tetris
 
         private static BlockUserControl[] blocks = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(), new LBlock(), new JBlock(), new SBlock(), new ZBlock() };
 
-        //private static BlockUserControl[] blocks = new BlockUserControl[] { new TBlock()};
-
         private static BlockUserControl[] shuffledBlock = new BlockUserControl[blocks.Length];
 
         BlockUserControl currentBlock;
@@ -28,8 +26,6 @@ namespace Tetris
 
             ShuffleBlocksArray(blocks);
             currentBlock = GetRandomBlock();
-
-            this.ActiveControl = null;
 
             timer1.Tick += TimerTick;
             timer1.Interval = 500;
@@ -88,15 +84,8 @@ namespace Tetris
 
         private BlockUserControl GetRandomBlock()
         {
-            //var shape = ShapesHandler.GetRandomShape();
-
-            //var block = shuffledBlock[new Random().Next(shuffledBlock.Length)];
-
             var block = shuffledBlock[blocksGenerated];
 
-            //var block = blocks[0];
-
-            // Calculate the x and y values as if the shape lies in the center
             currentX = 4;
             currentY = -block.BlockHeight;
 
@@ -111,17 +100,14 @@ namespace Tetris
             return block;
         }
 
-        // returns if it reaches the bottom or touches any other blocks
         private bool MoveBlockIfPossible(int moveDown = 0, int moveSide = 0)
         {
             var newX = currentX + moveSide;
             var newY = currentY + moveDown;
 
-            // check if it reaches the bottom or side bar
             if (newX < 0 || newX + currentBlock.BlockWidth > gridWidth || newY + currentBlock.BlockHeight > gridHeight)
                 return false;
 
-            // check if it touches any other blocks 
             for (int i = 0; i < currentBlock.BlockWidth; i++)
             {
                 for (int j = 0; j < currentBlock.BlockHeight; j++)
@@ -141,7 +127,6 @@ namespace Tetris
 
         Bitmap workingBitmap;
         Graphics workingGraphics;
-
         private void DrawBlock()
         {
             workingBitmap = new Bitmap(bitmap);
@@ -173,7 +158,6 @@ namespace Tetris
                         {
                             gridDotArray[currentY + j, currentX + i] = currentBlock.BlockID;
                         }
-                        //gridDotArray[currentY + j, currentX + i] = currentBlock.BlockID;
                     }
                 }
             }
@@ -185,22 +169,17 @@ namespace Tetris
 
             for (int i = gridHeight-1; i >= 0 ; i--)
             {
-                //Console.WriteLine($"Row {i}");
-                //check row
                 if (CheckRowFull(i))
                 {
-                    //Console.WriteLine($"Row {i} is full");
                     ClearRow(i);
                     clearedRows++;
                 }else if (clearedRows>0)
                 {
-                    //Console.WriteLine(clearedRows);
                     MoveRowDown(i, clearedRows);
                 }
             }
 
             PrintGridDotArray();
-
             UpdateBitmap();
         }
 
@@ -208,13 +187,7 @@ namespace Tetris
         {
             for (int j = 0; j < gridWidth; j++)
             {
-                //Console.WriteLine($"To move row{i}");
                 gridDotArray[i + clearedRows, j] = gridDotArray[i, j];
-                //gridDotArray[i, j] = 0;
-
-                //grid[r + numRows, c] = grid[r, c];
-                //grid[r, c] = 0;
-
             }
         }
 
@@ -298,15 +271,12 @@ namespace Tetris
         {
             var isMoveSuccess = MoveBlockIfPossible(moveDown: 1);
 
-            // if shape reached bottom or touched any other shapes
             if (!isMoveSuccess)
             {
-                // copy working image into canvas image
                 bitmap = new Bitmap(workingBitmap);
 
                 UpdateGridDotArrayWithCurrentBlock();
 
-                // get next shape
                 currentBlock = GetRandomBlock();
 
                 CheckRows();
@@ -331,30 +301,20 @@ namespace Tetris
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
 
-
             var verticalMove = 0;
             var horizontalMove = 0;
 
-            // calculate the vertical and horizontal move values
-            // based on the key pressed
             switch (keyData)
             {
-                // move shape left
                 case Keys.Left:
                     verticalMove--;
                     break;
-
-                // move shape right
                 case Keys.Right:
                     verticalMove++;
                     break;
-
-                // move shape down faster
                 case Keys.Down:
                     horizontalMove++;
                     break;
-
-                // rotate the shape clockwise
                 case Keys.Up:
                     currentBlock.RotateBlock();
                     break;
@@ -364,30 +324,11 @@ namespace Tetris
 
             var isMoveSuccess = MoveBlockIfPossible(horizontalMove, verticalMove);
 
-            // if the player was trying to rotate the shape, but
-            // that move was not possible - rollback the shape
             if (!isMoveSuccess && keyData == Keys.Up)
                 currentBlock.RollbackBlock();
 
 
             return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        private void PlaceHolderRotation()
-        {
-            var isMoveSucces = MoveBlockIfPossible(0,0);
-
-            if (!isMoveSucces)
-            {
-                Console.WriteLine("no");
-            }
-            else
-            {
-                Console.WriteLine("yes");
-            }
-
-            //currentBlock.RotateBlock();
-            //DrawBlock();
         }
 
         public void PrintGridDotArray()
