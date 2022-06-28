@@ -69,11 +69,11 @@ namespace Tetris
                 shuffledBlock[j] = temp;
             }
 
-            foreach (BlockUserControl sBlock in shuffledBlock)
-            {
-                Console.WriteLine(sBlock.ToString());
-            }
-            Console.WriteLine("//////////////");
+            //foreach (BlockUserControl sBlock in shuffledBlock)
+            //{
+            //    Console.WriteLine(sBlock.ToString());
+            //}
+            //Console.WriteLine("//////////////");
 
             return shuffledBlock;
         }
@@ -163,48 +163,98 @@ namespace Tetris
             }
         }
 
-        public void CheckRows()
-        {
-            int clearedRows = 0;
+        int clearedRows = 0;
 
-            for (int i = gridHeight-1; i >= 0 ; i--)
+        public void CheckRows(int Row, int Column, int clearedRows)
+        {
+            
+
+            if (0 <= Row && Row <= gridHeight-1 )
             {
-                if (CheckRowFull(i))
+                //Console.WriteLine($"CheckRows---Row: {Row} Column: {Column}");
+
+
+                CheckColumn(Row,Column);
+
+                if (sum== 10)
                 {
-                    ClearRow(i);
+                    Console.WriteLine($"Row: {Row} is full");
+                    ClearRow(Row,Column);
                     clearedRows++;
-                }else if (clearedRows>0)
+                    Console.WriteLine($"Row: {Row} is cleared");
+                }else if (clearedRows>0 )
                 {
-                    MoveRowDown(i, clearedRows);
+                    Console.WriteLine(clearedRows);
+                    MoveRowDown(Row,Column, clearedRows);
                 }
+
+                Row--;
+                sum = 0;
+
+                CheckRows(Row, Column, clearedRows);
+            }
+            else
+            {
+                Console.WriteLine($"Terminou recursividade");
+                //PrintGridDotArray();
+                clearedRows = 0;
+                UpdateBitmap();
+                return;
             }
 
-            PrintGridDotArray();
-            UpdateBitmap();
         }
 
-        private void MoveRowDown(int i, int clearedRows)
-        {
-            for (int j = 0; j < gridWidth; j++)
-            {
-                gridDotArray[i + clearedRows, j] = gridDotArray[i, j];
-            }
-        }
 
-        private void ClearRow(int i)
-        {
-            for (int j = 0; j < gridWidth; j++)
-            {
-                gridDotArray[i, j] = 0;
-            }
-        }
+        public int sum = 0;
 
-        private bool CheckRowFull(int i)
+        public void CheckColumn(int Row, int Column)
         {
-            for (int j = 0; j < gridWidth; j++)
+            if (0 <= Column && Column <= gridHeight - 1)
             {
-                if (gridDotArray[i,j] == 0)
+                //Console.WriteLine($"Column: {Column}");
+
+                if (gridDotArray[Row, Column] != 0)
                 {
+                    sum++;
+                }
+                Column--;
+                CheckColumn(Row,Column);
+            }
+        }
+
+        private void MoveRowDown(int Row, int Column, int clearedRows)
+        {
+            if (0 <= Column && Column <= gridHeight - 1)
+            {
+                gridDotArray[Row + clearedRows, Column] = gridDotArray[Row, Column];
+                Column--;
+                MoveRowDown(Row, Column, clearedRows);
+            }
+            else
+            {
+                Console.WriteLine("teste");
+            }
+            
+        }
+
+        private void ClearRow(int Row, int Column)
+        {
+            if (0 <= Column && Column <= gridHeight - 1)
+            {
+                gridDotArray[Row, Column] = 0;
+                Column--;
+                ClearRow(Row, Column);
+            }
+
+        }
+
+        private bool CheckRowFull(int i,int c)
+        {
+            if ( 0 <=c && c <= gridWidth-1 )
+            {
+                if (gridDotArray[i,c] == 0)
+                {
+                    c--;
                     return false;
                 }
             }
@@ -279,7 +329,7 @@ namespace Tetris
 
                 currentBlock = GetRandomBlock();
 
-                CheckRows();
+                CheckRows(gridHeight-1, gridWidth-1, clearedRows);
             }
         }
 
