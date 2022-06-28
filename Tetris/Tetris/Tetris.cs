@@ -69,12 +69,6 @@ namespace Tetris
                 shuffledBlock[j] = temp;
             }
 
-            //foreach (BlockUserControl sBlock in shuffledBlock)
-            //{
-            //    Console.WriteLine(sBlock.ToString());
-            //}
-            //Console.WriteLine("//////////////");
-
             return shuffledBlock;
         }
 
@@ -167,58 +161,49 @@ namespace Tetris
 
         public void CheckRows(int Row, int Column, int clearedRows)
         {
-            
 
             if (0 <= Row && Row <= gridHeight-1 )
             {
-                //Console.WriteLine($"CheckRows---Row: {Row} Column: {Column}");
+                CheckIfRowIsFull(Row,Column);
 
-
-                CheckColumn(Row,Column);
-
-                if (sum== 10)
+                if (sum == 10)
                 {
-                    Console.WriteLine($"Row: {Row} is full");
                     ClearRow(Row,Column);
                     clearedRows++;
-                    Console.WriteLine($"Row: {Row} is cleared");
-                }else if (clearedRows>0 )
+                }else if (clearedRows > 0 )
                 {
-                    Console.WriteLine(clearedRows);
                     MoveRowDown(Row,Column, clearedRows);
                 }
 
                 Row--;
                 sum = 0;
-
                 CheckRows(Row, Column, clearedRows);
             }
             else
             {
-                Console.WriteLine($"Terminou recursividade");
                 //PrintGridDotArray();
                 clearedRows = 0;
                 UpdateBitmap();
                 return;
             }
-
         }
-
 
         public int sum = 0;
 
-        public void CheckColumn(int Row, int Column)
+        public void CheckIfRowIsFull(int Row, int Column)
         {
             if (0 <= Column && Column <= gridHeight - 1)
             {
-                //Console.WriteLine($"Column: {Column}");
-
                 if (gridDotArray[Row, Column] != 0)
                 {
                     sum++;
                 }
                 Column--;
-                CheckColumn(Row,Column);
+                CheckIfRowIsFull(Row,Column);
+            }
+            else
+            {
+                return;
             }
         }
 
@@ -232,9 +217,8 @@ namespace Tetris
             }
             else
             {
-                Console.WriteLine("teste");
+                return;
             }
-            
         }
 
         private void ClearRow(int Row, int Column)
@@ -245,20 +229,10 @@ namespace Tetris
                 Column--;
                 ClearRow(Row, Column);
             }
-
-        }
-
-        private bool CheckRowFull(int i,int c)
-        {
-            if ( 0 <=c && c <= gridWidth-1 )
+            else
             {
-                if (gridDotArray[i,c] == 0)
-                {
-                    c--;
-                    return false;
-                }
+                return;
             }
-            return true;
         }
 
         public void UpdateBitmap()
@@ -299,7 +273,6 @@ namespace Tetris
                     }
                 }
             }
-
             picTetris.Image = bitmap;
         }
 
@@ -314,7 +287,6 @@ namespace Tetris
                 //Application.Exit();
                 gameover = true;
             }
-
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -338,19 +310,8 @@ namespace Tetris
             PrintGridDotArray();
         }
 
-        private void MoveLeftRight(int moveLeftRight)
-        {
-            MoveBlockIfPossible(moveSide: moveLeftRight);
-        }
-
-        private void MoveDown(int dropPiece)
-        {
-            MoveBlockIfPossible(moveDown: dropPiece);
-        }
-
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-
             var verticalMove = 0;
             var horizontalMove = 0;
 
@@ -376,7 +337,6 @@ namespace Tetris
 
             if (!isMoveSuccess && keyData == Keys.Up)
                 currentBlock.RollbackBlock();
-
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
