@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-//using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,166 +13,139 @@ namespace Tetris
     public partial class TetrisForm : Form
     {
 
+        private static BlockUserControl[] blocksArray = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(),
+                                                                                 new LBlock(), new JBlock(), new SBlock(), 
+                                                                                 new ZBlock() };
+
+        private static BlockUserControl[] shuffledBlockArray = new BlockUserControl[blocksArray.Length];
+
+        BlockUserControl currentBlock;
+
+        Bitmap bitmap;
+        Graphics graphics;
+
+        Bitmap workingBitmap;
+        Graphics workingGraphics;
+
+        int gridWidth = 10;
+        int gridHeight = 20;
+        int[,] gridArray;
+        int blockGraphicSize = 20;
+
+        int currentPositionX;
+        int currentPositionY;
+        int blocksGenerated = 0;
+
+        int gridArrayCellContaisBlock = 0;
+        int clearedRows = 0;
+        int score = 0;
+
+        bool isPaused;
+
         public enum GameState
         {
             Unpaused,
             Paused
         }
 
-        
-
-        //GameState gameState;
-
-        private static BlockUserControl[] blocks = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(), new LBlock(), new JBlock(), new SBlock(), new ZBlock() };
-
-        private static BlockUserControl[] shuffledBlock = new BlockUserControl[blocks.Length];
-
-        BlockUserControl currentBlock;
-
         public TetrisForm()
         {
             InitializeComponent();
-            LoadCanvas();
+            LoadGame();
+        }
 
-            //gameState = GameState.Paused;
-            GameStateMachine(GameState.Paused);
+        public void LoadGame()
+        {
+            LoadTetrisBoard();
+
+            GameStateSwitch(GameState.Paused);
 
             btnRestart.Enabled = false;
-
             btnPause.Enabled = false;
             btnPause.Text = "PAUSE";
-
-            //ShuffleBlocksArray(blocks);
-            //currentBlock = GetRandomBlock();
-
-            //timer1.Tick += TimerTick;
-            //timer1.Interval = 500;
-            //timer1.Start();
         }
 
-        public void PreLoadGAme()
+        private void LoadTetrisBoard()
         {
-            LoadCanvas();
+            picTetris.Width = gridWidth * blockGraphicSize;
+            picTetris.Height = gridHeight * blockGraphicSize;
 
-            //gameState = GameState.Paused;
-            GameStateMachine(GameState.Paused);
+            bitmap = new Bitmap(picTetris.Width, picTetris.Height);
 
-            btnRestart.Enabled = false;
+            graphics = Graphics.FromImage(bitmap);
+            graphics.FillRectangle(Brushes.Black, 0, 0, bitmap.Width, bitmap.Height);
 
-            btnPause.Enabled = false;
-            btnPause.Text = "PAUSE";
+            picTetris.Image = bitmap;
 
-            //ShuffleBlocksArray(blocks);
-            //currentBlock = GetRandomBlock();
-
-            //timer1.Tick += TimerTick;
-            //timer1.Interval = 500;
-            //timer1.Start();
-
+            gridArray = new int[gridHeight, gridWidth];
         }
 
-        public int score = 0;
-
-        public void StartGame()
-        {
-            //LoadCanvas();
-
-            //gameState = GameState.Unpaused;
-
-            
-
-            btnRestart.Enabled = true;
-
-            btnPause.Enabled = true;
-            GameStateMachine(GameState.Unpaused);
-
-            score = 0;
-            UpdateScoreCounter(score);
-
-            ShuffleBlocksArray(blocks);
-            currentBlock = GetRandomBlock();
-
-            btnStart.Enabled = false;
-
-            timer1.Tick += TimerTick;
-            timer1.Interval = 500;
-            timer1.Start();
-            
-        }
-
-        public void GameStateMachine(GameState game)
+        public void GameStateSwitch(GameState game)
         {
             switch (game)
             {
                 case GameState.Unpaused:
                     isPaused = false;
+                    gameTimer.Start();
                     btnPause.Text = "PAUSE";
-                    timer1.Start();
                     break;
                 case GameState.Paused:
-                    timer1.Stop();
-                    btnPause.Text = "RESUME";
                     isPaused = true;
+                    gameTimer.Stop();
+                    btnPause.Text = "RESUME";
                     break;
             }
         }
 
-
-        Bitmap bitmap;
-        Graphics graphics;
-        int gridWidth = 10;
-        int gridHeight = 20;
-        int[,] gridDotArray;
-        int dotSize = 20;
-
-        private void LoadCanvas()
+        public void StartGame()
         {
-            picTetris.Width = gridWidth * dotSize;
-            picTetris.Height = gridHeight * dotSize;
+            btnRestart.Enabled = true;
+            btnPause.Enabled = true;
 
-            bitmap = new Bitmap(picTetris.Width, picTetris.Height);
+            GameStateSwitch(GameState.Unpaused);
 
-            graphics = Graphics.FromImage(bitmap);
-            graphics.FillRectangle(Brushes.Black, 0,0,bitmap.Width, bitmap.Height);
+            score = 0;
+            UpdateScoreCounter(score);
 
-            picTetris.Image = bitmap;
+            ShuffleBlocksArray(blocksArray);
+            currentBlock = GetRandomBlock();
 
-            gridDotArray = new int[gridHeight,gridWidth];
+            btnStart.Enabled = false;
+
+            gameTimer.Tick += TimerTick;
+            gameTimer.Interval = 500;
+            gameTimer.Start();
         }
 
         private BlockUserControl[] ShuffleBlocksArray(BlockUserControl[] blocks)
         {
             Random random = new Random();
 
-            Array.Copy(blocks, shuffledBlock, blocks.Length);
+            Array.Copy(blocks, shuffledBlockArray, blocks.Length);
 
-            for (int i = shuffledBlock.Length - 1; i > 0; i--)
+            for (int i = shuffledBlockArray.Length - 1; i > 0; i--)
             {
                 int j = random.Next(i + 1);
-                var temp = shuffledBlock[i];
-                shuffledBlock[i] = shuffledBlock[j];
-                shuffledBlock[j] = temp;
+                var temp = shuffledBlockArray[i];
+                shuffledBlockArray[i] = shuffledBlockArray[j];
+                shuffledBlockArray[j] = temp;
             }
 
-            return shuffledBlock;
+            return shuffledBlockArray;
         }
-
-        int currentX;
-        int currentY;
-        int blocksGenerated = 0;
 
         private BlockUserControl GetRandomBlock()
         {
-            var block = shuffledBlock[blocksGenerated];
+            var block = shuffledBlockArray[blocksGenerated];
 
-            currentX = 4;
-            currentY = -block.BlockHeight;
+            currentPositionX = 4;
+            currentPositionY = -block.BlockHeight;
 
             blocksGenerated++;
 
             if (blocksGenerated==7)
             {
-                ShuffleBlocksArray(shuffledBlock);
+                ShuffleBlocksArray(shuffledBlockArray);
                 blocksGenerated = 0;
             }
 
@@ -182,8 +154,8 @@ namespace Tetris
 
         private bool MoveBlockIfPossible(int moveDown = 0, int moveSide = 0)
         {
-            var newX = currentX + moveSide;
-            var newY = currentY + moveDown;
+            var newX = currentPositionX + moveSide;
+            var newY = currentPositionY + moveDown;
 
             if (newX < 0 || newX + currentBlock.BlockWidth > gridWidth || newY + currentBlock.BlockHeight > gridHeight)
                 return false;
@@ -192,21 +164,20 @@ namespace Tetris
             {
                 for (int j = 0; j < currentBlock.BlockHeight; j++)
                 {
-                    if (newY + j > 0 && gridDotArray[newY + j, newX + i] != 0 && currentBlock.BlockDots[j, i] != 0)
+                    if (newY + j > 0 && gridArray[newY + j, newX + i] != 0 && currentBlock.BlockDots[j, i] != 0)
                         return false;
                 }
             }
 
-            currentX = newX;
-            currentY = newY;
+            currentPositionX = newX;
+            currentPositionY = newY;
 
             DrawBlock();
 
             return true;
         }
 
-        Bitmap workingBitmap;
-        Graphics workingGraphics;
+
         private void DrawBlock()
         {
             workingBitmap = new Bitmap(bitmap);
@@ -217,16 +188,16 @@ namespace Tetris
                 for (int j = 0; j < currentBlock.BlockDots.GetLength(0); j++)
                 {
                     if (currentBlock.BlockDots[j, i] != 0)
-                        workingGraphics.FillRectangle(currentBlock.BlockColor, (currentX + i) * dotSize, (currentY + j) * dotSize, dotSize, dotSize);
+                        workingGraphics.FillRectangle(currentBlock.BlockColor, (currentPositionX + i) * blockGraphicSize, (currentPositionY + j) * blockGraphicSize, blockGraphicSize, blockGraphicSize);
                 }
             }
 
             picTetris.Image = workingBitmap;
         }
 
-        private void UpdateGridDotArrayWithCurrentBlock()
+        private void UpdateGridArrayWithCurrentBlock()
         {
-            if (!BoolGameOver())
+            if (!CheckGameOver())
             {
                 for (int i = 0; i < currentBlock.BlockWidth; i++)
                 {
@@ -234,7 +205,7 @@ namespace Tetris
                     {
                         if (currentBlock.BlockDots[j, i] != 0)
                         {
-                           gridDotArray[currentY + j, currentX + i] = currentBlock.BlockID;
+                           gridArray[currentPositionY + j, currentPositionX + i] = currentBlock.BlockID;
                         }
                     }
                 }
@@ -246,18 +217,31 @@ namespace Tetris
             }
         }
 
-        int clearedRows = 0;
+        private void TimerTick(object sender, EventArgs e)
+        {
+            var isMoveSuccess = MoveBlockIfPossible(moveDown: 1);
+
+            if (!isMoveSuccess)
+            {
+                bitmap = new Bitmap(workingBitmap);
+
+                UpdateGridArrayWithCurrentBlock();
+
+                currentBlock = GetRandomBlock();
+
+                CheckRows(gridHeight - 1, gridWidth - 1, clearedRows);
+            }
+        }
 
         public void CheckRows(int Row, int Column, int clearedRows)
         {
-
             if (0 <= Row && Row <= gridHeight-1 )
             {
-                CheckIfRowIsFull(Row,Column);
+                IsRowFull(Row,Column);
 
-                if (sum == 10)
+                if (gridArrayCellContaisBlock == 10)
                 {
-                    ClearRow(Row,Column);
+                    ClearFullRow(Row,Column);
                     clearedRows++;
                     
                     if (clearedRows==4)
@@ -269,39 +253,42 @@ namespace Tetris
                         UpdateScoreCounter(50);
                     }
 
-                    Console.WriteLine(timer1.Interval.ToString());
-                    timer1.Interval -= 100;
+                    if (gameTimer.Interval <= 20)
+                    {
+                        gameTimer.Interval = 20;
+                    }
+                    else
+                    {
+                        gameTimer.Interval -= 5;
+                    }
 
                 }else if (clearedRows > 0 )
                 {
-                    MoveRowDown(Row,Column, clearedRows);
+                    MoveRowsDown(Row,Column, clearedRows);
                 }
 
                 Row--;
-                sum = 0;
+                gridArrayCellContaisBlock = 0;
                 CheckRows(Row, Column, clearedRows);
             }
             else
             {
-                //PrintGridDotArray();
                 clearedRows = 0;
                 UpdateBitmap();
                 return;
             }
         }
 
-        public int sum = 0;
-
-        public void CheckIfRowIsFull(int Row, int Column)
+        public void IsRowFull(int Row, int Column)
         {
             if (0 <= Column && Column <= gridHeight - 1)
             {
-                if (gridDotArray[Row, Column] != 0)
+                if (gridArray[Row, Column] != 0)
                 {
-                    sum++;
+                    gridArrayCellContaisBlock++;
                 }
                 Column--;
-                CheckIfRowIsFull(Row,Column);
+                IsRowFull(Row,Column);
             }
             else
             {
@@ -309,13 +296,13 @@ namespace Tetris
             }
         }
 
-        private void MoveRowDown(int Row, int Column, int clearedRows)
+        private void MoveRowsDown(int Row, int Column, int clearedRows)
         {
             if (0 <= Column && Column <= gridHeight - 1)
             {
-                gridDotArray[Row + clearedRows, Column] = gridDotArray[Row, Column];
+                gridArray[Row + clearedRows, Column] = gridArray[Row, Column];
                 Column--;
-                MoveRowDown(Row, Column, clearedRows);
+                MoveRowsDown(Row, Column, clearedRows);
             }
             else
             {
@@ -323,13 +310,13 @@ namespace Tetris
             }
         }
 
-        private void ClearRow(int Row, int Column)
+        private void ClearFullRow(int Row, int Column)
         {
             if (0 <= Column && Column <= gridHeight - 1)
             {
-                gridDotArray[Row, Column] = 0;
+                gridArray[Row, Column] = 0;
                 Column--;
-                ClearRow(Row, Column);
+                ClearFullRow(Row, Column);
             }
             else
             {
@@ -343,34 +330,33 @@ namespace Tetris
             {
                 for (int j = 0; j < gridHeight; j++)
                 {
-
                     graphics = Graphics.FromImage(bitmap);
 
-                    switch (gridDotArray[j,i])
+                    switch (gridArray[j,i])
                     {
                         case 1:
-                            graphics.FillRectangle(Brushes.Blue,i * dotSize, j * dotSize, dotSize, dotSize);
+                            graphics.FillRectangle(Brushes.Blue,i * blockGraphicSize, j * blockGraphicSize, blockGraphicSize, blockGraphicSize);
                             break;
                         case 2:
-                            graphics.FillRectangle(Brushes.Orange, i * dotSize, j * dotSize, dotSize, dotSize);
+                            graphics.FillRectangle(Brushes.Orange, i * blockGraphicSize, j * blockGraphicSize, blockGraphicSize, blockGraphicSize);
                             break;
                         case 3:
-                            graphics.FillRectangle(Brushes.Purple, i * dotSize, j * dotSize, dotSize, dotSize);
+                            graphics.FillRectangle(Brushes.Purple, i * blockGraphicSize, j * blockGraphicSize, blockGraphicSize, blockGraphicSize);
                             break;
                         case 4:
-                            graphics.FillRectangle(Brushes.LightGreen, i * dotSize, j * dotSize, dotSize, dotSize);
+                            graphics.FillRectangle(Brushes.LightGreen, i * blockGraphicSize, j * blockGraphicSize, blockGraphicSize, blockGraphicSize);
                             break;
                         case 5:
-                            graphics.FillRectangle(Brushes.DarkGreen, i * dotSize, j * dotSize, dotSize, dotSize);
+                            graphics.FillRectangle(Brushes.DarkGreen, i * blockGraphicSize, j * blockGraphicSize, blockGraphicSize, blockGraphicSize);
                             break;
                         case 6:
-                            graphics.FillRectangle(Brushes.Red, i * dotSize, j * dotSize, dotSize, dotSize);
+                            graphics.FillRectangle(Brushes.Red, i * blockGraphicSize, j * blockGraphicSize, blockGraphicSize, blockGraphicSize);
                             break;
                         case 7:
-                            graphics.FillRectangle(Brushes.Salmon, i * dotSize, j * dotSize, dotSize, dotSize);
+                            graphics.FillRectangle(Brushes.Salmon, i * blockGraphicSize, j * blockGraphicSize, blockGraphicSize, blockGraphicSize);
                             break;
                         default:
-                            graphics.FillRectangle(Brushes.Black, i * dotSize, j * dotSize, dotSize, dotSize);
+                            graphics.FillRectangle(Brushes.Black, i * blockGraphicSize, j * blockGraphicSize, blockGraphicSize, blockGraphicSize);
                             break;
                     }
                 }
@@ -378,39 +364,16 @@ namespace Tetris
             picTetris.Image = bitmap;
         }
 
-        public bool gameover = false;
-        private bool BoolGameOver()
+        private bool CheckGameOver()
         {
-            if (currentY < 0)
+            if (currentPositionY < 0)
             {
-                Console.WriteLine("game over ");
                 return true;
             }
             else
             {
-                Console.WriteLine("continue ");
                 return false;
             }
-        }
-
-        private void TimerTick(object sender, EventArgs e)
-        {
-
-            var isMoveSuccess = MoveBlockIfPossible(moveDown: 1);
-
-            if (!isMoveSuccess)
-            {
-                bitmap = new Bitmap(workingBitmap);
-
-                UpdateGridDotArrayWithCurrentBlock();
-
-                currentBlock = GetRandomBlock();
-
-                CheckRows(gridHeight - 1, gridWidth - 1, clearedRows);
-
-            }
-            Console.WriteLine($"tick {timer1.Interval.ToString()}");
-
         }
 
         private void UpdateScoreCounter(int bonus)
@@ -419,57 +382,48 @@ namespace Tetris
             lblScore.Text = ($"SCORE: {score}");
         }
 
-        private void btnStart_Click(object sender, EventArgs e)
+        private void StartButtonClick(object sender, EventArgs e)
         {
             StartGame();
             lblScore.Focus();
         }
 
-        private void btnRestart_Click(object sender, EventArgs e)
+        private void RestartButtonClick(object sender, EventArgs e)
         {
-
-            ResetGridDotArray();
+            ResetGridArray();
 
             currentBlock = GetRandomBlock();
-            timer1.Interval = 500;
+            gameTimer.Interval = 500;
             score = 0;
             lblScore.Focus();
         }
 
         private void GameOver()
         {
-            ResetGridDotArray();
+            ResetGridArray();
 
-            timer1.Stop();
-            timer1.Tick -= TimerTick;
-            timer1.Dispose();
+            gameTimer.Stop();
+            gameTimer.Tick -= TimerTick;
+            gameTimer.Dispose();
 
             btnRestart.Enabled = false;
 
             btnPause.Enabled = false;
             btnPause.Text = "PAUSE";
 
-
-            Console.WriteLine($"toc {timer1.Interval.ToString()}");
             btnStart.Enabled = true;
         }
 
-
-        public bool isPaused; 
-
-        private void btnPause_Click(object sender, EventArgs e)
+        private void PauseButtonClick(object sender, EventArgs e)
         {
-            //PrintGridDotArray();
-            //gameState = GameState.Paused;
             if (isPaused == false)
             {
-                GameStateMachine(GameState.Paused);
+                GameStateSwitch(GameState.Paused);
             }
             else
             {
-                GameStateMachine(GameState.Unpaused);
+                GameStateSwitch(GameState.Unpaused);
             }
-            
             lblScore.Focus();
         }
 
@@ -504,43 +458,36 @@ namespace Tetris
                     currentBlock.RollbackBlock();
 
                 return base.ProcessCmdKey(ref msg, keyData);
-
             }
             else
             {
                 return base.ProcessCmdKey(ref msg, keyData);
-
             }
         }
 
         public void PrintGridDotArray()
         {
-            for (int i = 0; i < gridDotArray.GetLength(0); i++)
+            for (int i = 0; i < gridArray.GetLength(0); i++)
             {
-                for (int j = 0; j < gridDotArray.GetLength(1); j++)
+                for (int j = 0; j < gridArray.GetLength(1); j++)
                 {
-                    Console.Write(gridDotArray[i, j]);
+                    Console.Write(gridArray[i, j]);
                 }
                 Console.WriteLine();
             }
             Console.WriteLine("/////////");
         }
 
-        private void ResetGridDotArray()
+        private void ResetGridArray()
         {
-            for (int i = 0; i < gridDotArray.GetLength(0); i++)
+            for (int i = 0; i < gridArray.GetLength(0); i++)
             {
-                for (int j = 0; j < gridDotArray.GetLength(1); j++)
+                for (int j = 0; j < gridArray.GetLength(1); j++)
                 {
-                    gridDotArray[i, j] = 0;
+                    gridArray[i, j] = 0;
                 }
             }
-            Console.WriteLine("cleared");
-
-            PrintGridDotArray();
-            
             UpdateBitmap();
         }
-
     }
 }

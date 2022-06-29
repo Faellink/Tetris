@@ -36,7 +36,7 @@ namespace Tetris
             this.lblScore = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.picTetris = new System.Windows.Forms.PictureBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.gameTimer = new System.Windows.Forms.Timer(this.components);
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
@@ -54,7 +54,7 @@ namespace Tetris
             this.btnStart.TabStop = false;
             this.btnStart.Text = "START";
             this.btnStart.UseVisualStyleBackColor = true;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            this.btnStart.Click += new System.EventHandler(this.StartButtonClick);
             // 
             // btnRestart
             // 
@@ -65,7 +65,7 @@ namespace Tetris
             this.btnRestart.TabStop = false;
             this.btnRestart.Text = "RESTART";
             this.btnRestart.UseVisualStyleBackColor = true;
-            this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
+            this.btnRestart.Click += new System.EventHandler(this.RestartButtonClick);
             // 
             // btnPause
             // 
@@ -76,7 +76,7 @@ namespace Tetris
             this.btnPause.TabStop = false;
             this.btnPause.Text = "PAUSE";
             this.btnPause.UseVisualStyleBackColor = true;
-            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
+            this.btnPause.Click += new System.EventHandler(this.PauseButtonClick);
             // 
             // lblScore
             // 
@@ -149,7 +149,7 @@ namespace Tetris
         private System.Windows.Forms.Label lblScore;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox picTetris;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer gameTimer;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
     }
