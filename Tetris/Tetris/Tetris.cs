@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+//using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,6 +13,16 @@ namespace Tetris
 {
     public partial class TetrisForm : Form
     {
+
+        public enum GameState
+        {
+            Unpaused,
+            Paused
+        }
+
+        
+
+        //GameState gameState;
 
         private static BlockUserControl[] blocks = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(), new LBlock(), new JBlock(), new SBlock(), new ZBlock() };
 
@@ -24,12 +35,87 @@ namespace Tetris
             InitializeComponent();
             LoadCanvas();
 
+            //gameState = GameState.Paused;
+            GameStateMachine(GameState.Paused);
+
+            btnRestart.Enabled = false;
+
+            btnPause.Enabled = false;
+            btnPause.Text = "PAUSE";
+
+            //ShuffleBlocksArray(blocks);
+            //currentBlock = GetRandomBlock();
+
+            //timer1.Tick += TimerTick;
+            //timer1.Interval = 500;
+            //timer1.Start();
+        }
+
+        public void PreLoadGAme()
+        {
+            LoadCanvas();
+
+            //gameState = GameState.Paused;
+            GameStateMachine(GameState.Paused);
+
+            btnRestart.Enabled = false;
+
+            btnPause.Enabled = false;
+            btnPause.Text = "PAUSE";
+
+            //ShuffleBlocksArray(blocks);
+            //currentBlock = GetRandomBlock();
+
+            //timer1.Tick += TimerTick;
+            //timer1.Interval = 500;
+            //timer1.Start();
+
+        }
+
+        public int score = 0;
+
+        public void StartGame()
+        {
+            //LoadCanvas();
+
+            //gameState = GameState.Unpaused;
+
+            
+
+            btnRestart.Enabled = true;
+
+            btnPause.Enabled = true;
+            GameStateMachine(GameState.Unpaused);
+
+            score = 0;
+            UpdateScoreCounter(score);
+
             ShuffleBlocksArray(blocks);
             currentBlock = GetRandomBlock();
+
+            btnStart.Enabled = false;
 
             timer1.Tick += TimerTick;
             timer1.Interval = 500;
             timer1.Start();
+            
+        }
+
+        public void GameStateMachine(GameState game)
+        {
+            switch (game)
+            {
+                case GameState.Unpaused:
+                    isPaused = false;
+                    btnPause.Text = "PAUSE";
+                    timer1.Start();
+                    break;
+                case GameState.Paused:
+                    timer1.Stop();
+                    btnPause.Text = "RESUME";
+                    isPaused = true;
+                    break;
+            }
         }
 
 
@@ -140,20 +226,23 @@ namespace Tetris
 
         private void UpdateGridDotArrayWithCurrentBlock()
         {
-            for (int i = 0; i < currentBlock.BlockWidth; i++)
+            if (!BoolGameOver())
             {
-                for (int j = 0; j < currentBlock.BlockHeight; j++)
+                for (int i = 0; i < currentBlock.BlockWidth; i++)
                 {
-                    if (currentBlock.BlockDots[j, i] != 0)
+                    for (int j = 0; j < currentBlock.BlockHeight; j++)
                     {
-                        BoolGameOver();
-
-                        if (gameover == false)
+                        if (currentBlock.BlockDots[j, i] != 0)
                         {
-                            gridDotArray[currentY + j, currentX + i] = currentBlock.BlockID;
+                           gridDotArray[currentY + j, currentX + i] = currentBlock.BlockID;
                         }
                     }
                 }
+            }
+            else
+            {
+                GameOver();
+                MessageBox.Show("Game Over");
             }
         }
 
@@ -170,6 +259,19 @@ namespace Tetris
                 {
                     ClearRow(Row,Column);
                     clearedRows++;
+                    
+                    if (clearedRows==4)
+                    {
+                        UpdateScoreCounter(500);
+                    }
+                    else
+                    {
+                        UpdateScoreCounter(50);
+                    }
+
+                    Console.WriteLine(timer1.Interval.ToString());
+                    timer1.Interval -= 100;
+
                 }else if (clearedRows > 0 )
                 {
                     MoveRowDown(Row,Column, clearedRows);
@@ -277,20 +379,23 @@ namespace Tetris
         }
 
         public bool gameover = false;
-        private void BoolGameOver()
+        private bool BoolGameOver()
         {
             if (currentY < 0)
             {
-                timer1.Stop();
-                MessageBox.Show("Game Over");
-                //Application.Restart();
-                //Application.Exit();
-                gameover = true;
+                Console.WriteLine("game over ");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("continue ");
+                return false;
             }
         }
 
         private void TimerTick(object sender, EventArgs e)
         {
+
             var isMoveSuccess = MoveBlockIfPossible(moveDown: 1);
 
             if (!isMoveSuccess)
@@ -301,44 +406,111 @@ namespace Tetris
 
                 currentBlock = GetRandomBlock();
 
-                CheckRows(gridHeight-1, gridWidth-1, clearedRows);
+                CheckRows(gridHeight - 1, gridWidth - 1, clearedRows);
+
             }
+            Console.WriteLine($"tick {timer1.Interval.ToString()}");
+
         }
+
+        private void UpdateScoreCounter(int bonus)
+        {
+            score += bonus;
+            lblScore.Text = ($"SCORE: {score}");
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            StartGame();
+            lblScore.Focus();
+        }
+
+        private void btnRestart_Click(object sender, EventArgs e)
+        {
+
+            ResetGridDotArray();
+
+            currentBlock = GetRandomBlock();
+            timer1.Interval = 500;
+            score = 0;
+            lblScore.Focus();
+        }
+
+        private void GameOver()
+        {
+            ResetGridDotArray();
+
+            timer1.Stop();
+            timer1.Tick -= TimerTick;
+            timer1.Dispose();
+
+            btnRestart.Enabled = false;
+
+            btnPause.Enabled = false;
+            btnPause.Text = "PAUSE";
+
+
+            Console.WriteLine($"toc {timer1.Interval.ToString()}");
+            btnStart.Enabled = true;
+        }
+
+
+        public bool isPaused; 
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            PrintGridDotArray();
+            //PrintGridDotArray();
+            //gameState = GameState.Paused;
+            if (isPaused == false)
+            {
+                GameStateMachine(GameState.Paused);
+            }
+            else
+            {
+                GameStateMachine(GameState.Unpaused);
+            }
+            
+            lblScore.Focus();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            var verticalMove = 0;
-            var horizontalMove = 0;
-
-            switch (keyData)
+            if (isPaused == false)
             {
-                case Keys.Left:
-                    verticalMove--;
-                    break;
-                case Keys.Right:
-                    verticalMove++;
-                    break;
-                case Keys.Down:
-                    horizontalMove++;
-                    break;
-                case Keys.Up:
-                    currentBlock.RotateBlock();
-                    break;
-                default:
-                    return base.ProcessCmdKey(ref msg, keyData);
+                var verticalMove = 0;
+                var horizontalMove = 0;
+
+                switch (keyData)
+                {
+                    case Keys.Left:
+                        verticalMove--;
+                        break;
+                    case Keys.Right:
+                        verticalMove++;
+                        break;
+                    case Keys.Down:
+                        horizontalMove++;
+                        break;
+                    case Keys.Up:
+                        currentBlock.RotateBlock();
+                        break;
+                    default:
+                        return base.ProcessCmdKey(ref msg, keyData);
+                }
+
+                var isMoveSuccess = MoveBlockIfPossible(horizontalMove, verticalMove);
+
+                if (!isMoveSuccess && keyData == Keys.Up)
+                    currentBlock.RollbackBlock();
+
+                return base.ProcessCmdKey(ref msg, keyData);
+
             }
+            else
+            {
+                return base.ProcessCmdKey(ref msg, keyData);
 
-            var isMoveSuccess = MoveBlockIfPossible(horizontalMove, verticalMove);
-
-            if (!isMoveSuccess && keyData == Keys.Up)
-                currentBlock.RollbackBlock();
-
-            return base.ProcessCmdKey(ref msg, keyData);
+            }
         }
 
         public void PrintGridDotArray()
@@ -353,5 +525,22 @@ namespace Tetris
             }
             Console.WriteLine("/////////");
         }
+
+        private void ResetGridDotArray()
+        {
+            for (int i = 0; i < gridDotArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < gridDotArray.GetLength(1); j++)
+                {
+                    gridDotArray[i, j] = 0;
+                }
+            }
+            Console.WriteLine("cleared");
+
+            PrintGridDotArray();
+            
+            UpdateBitmap();
+        }
+
     }
 }

@@ -54,6 +54,7 @@ namespace Tetris
             this.btnStart.TabStop = false;
             this.btnStart.Text = "START";
             this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // btnRestart
             // 
@@ -64,6 +65,7 @@ namespace Tetris
             this.btnRestart.TabStop = false;
             this.btnRestart.Text = "RESTART";
             this.btnRestart.UseVisualStyleBackColor = true;
+            this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
             // 
             // btnPause
             // 
