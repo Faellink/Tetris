@@ -149,6 +149,7 @@ namespace Tetris
             this.btnSave.TabStop = false;
             this.btnSave.Text = "SAVE";
             this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.SaveButtonClick);
             // 
             // btnLoad
             // 

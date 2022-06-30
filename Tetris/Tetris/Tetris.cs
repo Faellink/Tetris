@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -48,10 +49,21 @@ namespace Tetris
             Paused
         }
 
+        ////////////////////////////////
+
+
+        string[] boardGridCharArray;
+
+        DateTime matchDate;
+
+
         public TetrisForm()
         {
             InitializeComponent();
             LoadGame();
+
+            boardGridCharArray = new string[(gridHeight * gridWidth)];
+            Console.WriteLine(boardGridCharArray.Length);
         }
 
         public void LoadGame()
@@ -99,6 +111,11 @@ namespace Tetris
 
         public void StartGame()
         {
+
+            matchDate = DateTime.Now;
+
+            Console.WriteLine(matchDate);
+
             btnRestart.Enabled = true;
             btnPause.Enabled = true;
 
@@ -489,5 +506,69 @@ namespace Tetris
             }
             UpdateBitmap();
         }
+
+        private void SaveButtonClick(object sender, EventArgs e)
+        {
+            int boardGridIndex = 0;
+            for (int i = 0; i < gridArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < gridArray.GetLength(1); j++)
+                {
+
+                    boardGridCharArray[boardGridIndex] += gridArray[i, j]; 
+                    
+                    boardGridIndex++;
+                }
+                //Console.WriteLine(i);
+            }
+            //PrintBoardGrid();
+            //PrintGridDotArray();
+
+            SendGameDataToDataBase(boardGridCharArray,score, matchDate);
+
+        }
+        void PrintBoardGrid()
+        {
+            for (int i = 0; i < boardGridCharArray.Length; i++)
+            {
+                Console.Write(boardGridCharArray[i]);
+            }
+            Console.WriteLine();
+        }
+
+
+        private void SendGameDataToDataBase(string[] boardGridCharArray, int score, DateTime matchDate)
+        {
+
+            var stringBoard = String.Join("", boardGridCharArray);
+
+            string connectionString = "Data Source=SQO-197;Initial Catalog=TetrisDB;Persist Security Info=True;User ID=sa;Password=sequor";
+
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            string sql = "INSERT INTO TetrisGameResults(GameBoard, Score, MatchDate)" + "VALUES (@gameBoard, @score, @matchDate)";
+
+            SqlCommand command = new SqlCommand(sql, connection);
+
+            command.Parameters.Add(new SqlParameter("@gameBoard", stringBoard));
+            command.Parameters.Add(new SqlParameter("@score", score));
+            command.Parameters.Add(new SqlParameter("@matchDate", matchDate));
+
+            connection.Open();
+
+            int result = command.ExecuteNonQuery();
+
+            if (result < 0)
+            {
+                MessageBox.Show("Error inserting data into DataBase");
+            }
+
+            command.Dispose();
+            connection.Close();
+        }
+
+        
+
+
     }
 }
