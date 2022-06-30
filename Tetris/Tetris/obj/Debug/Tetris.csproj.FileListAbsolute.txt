@@ -44,3 +44,4 @@ C:\Users\leoncioraf\Documents\Sequor - Desafios\Git\Sequor-tetris\Sequor-Tetris\
 C:\Users\leoncioraf\Documents\Sequor - Desafios\Git\Sequor-tetris\Sequor-Tetris\Tetris\Tetris\bin\Debug\es\DevExpress.XtraEditors.v19.2.resources.dll
 C:\Users\leoncioraf\Documents\Sequor - Desafios\Git\Sequor-tetris\Sequor-Tetris\Tetris\Tetris\bin\Debug\ja\DevExpress.XtraEditors.v19.2.resources.dll
 C:\Users\leoncioraf\Documents\Sequor - Desafios\Git\Sequor-tetris\Sequor-Tetris\Tetris\Tetris\bin\Debug\ru\DevExpress.XtraEditors.v19.2.resources.dll
+C:\Users\leoncioraf\Documents\Sequor - Desafios\Git\Sequor-tetris\Sequor-Tetris\Tetris\Tetris\obj\Debug\Tetris.csproj.AssemblyReference.cache
