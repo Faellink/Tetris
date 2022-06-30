@@ -524,8 +524,8 @@ namespace Tetris
             //PrintBoardGrid();
             //PrintGridDotArray();
 
-            SendGameDataToDataBase(boardGridCharArray,score, matchDate);
-
+            SendGameDataToDB(boardGridCharArray,score, matchDate);
+            ReceiveGameDataFromDB();
         }
         void PrintBoardGrid()
         {
@@ -537,7 +537,7 @@ namespace Tetris
         }
 
 
-        private void SendGameDataToDataBase(string[] boardGridCharArray, int score, DateTime matchDate)
+        private void SendGameDataToDB(string[] boardGridCharArray, int score, DateTime matchDate)
         {
 
             var stringBoard = String.Join("", boardGridCharArray);
@@ -568,7 +568,31 @@ namespace Tetris
         }
 
         
+        void ReceiveGameDataFromDB()
+        {
+            string connectionString = "Data Source=SQO-197;Initial Catalog=TetrisDB;Persist Security Info=True;User ID=sa;Password=sequor";
+            SqlConnection connection = new SqlConnection(connectionString);
 
+            connection.Open();
+
+            string sql = "SELECT TOP 1(GameID) FROM TetrisGameResults ORDER BY GameID DESC";
+            SqlCommand command = new SqlCommand(sql, connection);
+
+            SqlDataReader reader = command.ExecuteReader();
+
+            if (reader != null)
+            {
+                while (reader.Read())
+                {
+                    var tempGameId = reader.GetInt32(0).ToString();
+                    MessageBox.Show($"Saved as GameID {tempGameId}.\nUse this ID to Load your game and resume playing!");
+                    return;
+                }
+            }
+
+            command.Dispose();
+            connection.Close();
+        }
 
     }
 }
