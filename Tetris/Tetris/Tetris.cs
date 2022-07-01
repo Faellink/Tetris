@@ -594,5 +594,45 @@ namespace Tetris
             connection.Close();
         }
 
+        private void LoadButtonCLick(object sender, EventArgs e)
+        {
+            int gameID = int.Parse(txtIdGameToLoad.Text);
+            Console.WriteLine($"Loading game {gameID}");
+            LoadGame(gameID);
+        }
+
+        private void LoadGame(int gameID)
+        {
+            string connectionString = "Data Source=SQO-197;Initial Catalog=TetrisDB;Persist Security Info=True;User ID=sa;Password=sequor";
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            connection.Open();
+
+            string sql = ($"SELECT COUNT(*) FROM TetrisGameResults WHERE GameID = {gameID}");
+            SqlCommand command = new SqlCommand(sql, connection);
+
+            SqlDataReader reader = command.ExecuteReader();
+
+            if (reader != null)
+            {
+                while (reader.Read())
+                {
+                    var tempGameId = reader.GetInt32(0);
+                    if (tempGameId == 1)
+                    {
+                        Console.WriteLine("game found");
+                    }
+                    else
+                    {
+                        Console.WriteLine("game not found");
+                    }
+                    return;
+                }
+            }
+
+            command.Dispose();
+            connection.Close();
+
+        }
     }
 }

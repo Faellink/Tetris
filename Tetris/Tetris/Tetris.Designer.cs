@@ -40,11 +40,11 @@ namespace Tetris
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.btnLoad = new System.Windows.Forms.Button();
-            this.txtIdGameToLoad = new System.Windows.Forms.TextBox();
-            this.lblIdText = new System.Windows.Forms.Label();
             this.txtGameSaved = new System.Windows.Forms.TextBox();
+            this.lblIdText = new System.Windows.Forms.Label();
+            this.txtIdGameToLoad = new System.Windows.Forms.TextBox();
+            this.btnLoad = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picTetris)).BeginInit();
             this.panel2.SuspendLayout();
@@ -142,34 +142,14 @@ namespace Tetris
             this.panel4.Size = new System.Drawing.Size(204, 204);
             this.panel4.TabIndex = 7;
             // 
-            // btnSave
+            // txtGameSaved
             // 
-            this.btnSave.Location = new System.Drawing.Point(68, 17);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 0;
-            this.btnSave.TabStop = false;
-            this.btnSave.Text = "SAVE";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.SaveButtonClick);
-            // 
-            // btnLoad
-            // 
-            this.btnLoad.Location = new System.Drawing.Point(67, 116);
-            this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(75, 23);
-            this.btnLoad.TabIndex = 8;
-            this.btnLoad.TabStop = false;
-            this.btnLoad.Text = "LOAD";
-            this.btnLoad.UseVisualStyleBackColor = true;
-            // 
-            // txtIdGameToLoad
-            // 
-            this.txtIdGameToLoad.Location = new System.Drawing.Point(44, 90);
-            this.txtIdGameToLoad.Name = "txtIdGameToLoad";
-            this.txtIdGameToLoad.Size = new System.Drawing.Size(124, 20);
-            this.txtIdGameToLoad.TabIndex = 9;
-            this.txtIdGameToLoad.TabStop = false;
+            this.txtGameSaved.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtGameSaved.Location = new System.Drawing.Point(44, 42);
+            this.txtGameSaved.Name = "txtGameSaved";
+            this.txtGameSaved.ReadOnly = true;
+            this.txtGameSaved.Size = new System.Drawing.Size(124, 13);
+            this.txtGameSaved.TabIndex = 11;
             // 
             // lblIdText
             // 
@@ -180,14 +160,35 @@ namespace Tetris
             this.lblIdText.TabIndex = 10;
             this.lblIdText.Text = "Input GAME ID to LOAD ";
             // 
-            // txtGameSaved
+            // txtIdGameToLoad
             // 
-            this.txtGameSaved.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtGameSaved.Location = new System.Drawing.Point(44, 42);
-            this.txtGameSaved.Name = "txtGameSaved";
-            this.txtGameSaved.ReadOnly = true;
-            this.txtGameSaved.Size = new System.Drawing.Size(124, 13);
-            this.txtGameSaved.TabIndex = 11;
+            this.txtIdGameToLoad.Location = new System.Drawing.Point(44, 90);
+            this.txtIdGameToLoad.Name = "txtIdGameToLoad";
+            this.txtIdGameToLoad.Size = new System.Drawing.Size(124, 20);
+            this.txtIdGameToLoad.TabIndex = 9;
+            this.txtIdGameToLoad.TabStop = false;
+            // 
+            // btnLoad
+            // 
+            this.btnLoad.Location = new System.Drawing.Point(67, 116);
+            this.btnLoad.Name = "btnLoad";
+            this.btnLoad.Size = new System.Drawing.Size(75, 23);
+            this.btnLoad.TabIndex = 8;
+            this.btnLoad.TabStop = false;
+            this.btnLoad.Text = "LOAD";
+            this.btnLoad.UseVisualStyleBackColor = true;
+            this.btnLoad.Click += new System.EventHandler(this.LoadButtonCLick);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(68, 17);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 0;
+            this.btnSave.TabStop = false;
+            this.btnSave.Text = "SAVE";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.SaveButtonClick);
             // 
             // TetrisForm
             // 
