@@ -49,13 +49,10 @@ namespace Tetris
             Paused
         }
 
-        ////////////////////////////////
-
-
         string[] boardGridStringArray;
-
         DateTime matchDate;
 
+        int gameOverInt;
 
         public TetrisForm()
         {
@@ -128,7 +125,7 @@ namespace Tetris
 
             GameStateSwitch(GameState.Unpaused);
 
-            //score = 0;
+            score = 0;
             UpdateScoreCounter(score);
 
             ShuffleBlocksArray(blocksArray);
@@ -237,6 +234,8 @@ namespace Tetris
             else
             {
                 GameOver();
+                SendGameDataToDB(boardGridStringArray, score, matchDate, 1);
+                ReceiveGameDataFromDB();
                 MessageBox.Show("Game Over");
             }
         }
@@ -426,6 +425,7 @@ namespace Tetris
 
         private void GameOver()
         {
+
             ResetGridArray();
 
             gameTimer.Stop();
@@ -491,18 +491,18 @@ namespace Tetris
             }
         }
 
-        public void PrintGridDotArray()
-        {
-            for (int i = 0; i < gridArray.GetLength(0); i++)
-            {
-                for (int j = 0; j < gridArray.GetLength(1); j++)
-                {
-                    Console.Write(gridArray[i, j]);
-                }
-                Console.WriteLine();
-            }
-            Console.WriteLine("/////////");
-        }
+        //public void PrintGridDotArray()
+        //{
+        //    for (int i = 0; i < gridArray.GetLength(0); i++)
+        //    {
+        //        for (int j = 0; j < gridArray.GetLength(1); j++)
+        //        {
+        //            Console.Write(gridArray[i, j]);
+        //        }
+        //        Console.WriteLine();
+        //    }
+        //    Console.WriteLine("/////////");
+        //}
 
         private void ResetGridArray()
         {
@@ -513,40 +513,28 @@ namespace Tetris
                     gridArray[i, j] = 0;
                 }
             }
+
             UpdateBitmap();
         }
 
         private void SaveButtonClick(object sender, EventArgs e)
         {
             int boardGridIndex = 0;
+
             for (int i = 0; i < gridArray.GetLength(0); i++)
             {
                 for (int j = 0; j < gridArray.GetLength(1); j++)
                 {
-
                     boardGridStringArray[boardGridIndex] += gridArray[i, j] + ","; 
-                    
                     boardGridIndex++;
                 }
-                //Console.WriteLine(i);
             }
-            //PrintBoardGrid();
-            //PrintGridDotArray();
 
-            SendGameDataToDB(boardGridStringArray,score, matchDate);
+            SendGameDataToDB(boardGridStringArray,score, matchDate,0);
             ReceiveGameDataFromDB();
         }
-        void PrintBoardGrid()
-        {
-            for (int i = 0; i < boardGridStringArray.Length; i++)
-            {
-                Console.Write(boardGridStringArray[i]);
-            }
-            Console.WriteLine();
-        }
 
-
-        private void SendGameDataToDB(string[] boardGridStringArray, int score, DateTime matchDate)
+        private void SendGameDataToDB(string[] boardGridStringArray, int score, DateTime matchDate,int gameOverInt)
         {
 
             var stringBoard = String.Join("", boardGridStringArray);
@@ -555,13 +543,14 @@ namespace Tetris
 
             SqlConnection connection = new SqlConnection(connectionString);
 
-            string sql = "INSERT INTO TetrisGameResults(GameBoard, Score, MatchDate)" + "VALUES (@gameBoard, @score, @matchDate)";
+            string sql = "INSERT INTO TetrisGameResults(GameBoard, Score, MatchDate, GameOver)" + "VALUES (@gameBoard, @score, @matchDate, @gameOver)";
 
             SqlCommand command = new SqlCommand(sql, connection);
 
             command.Parameters.Add(new SqlParameter("@gameBoard", stringBoard));
             command.Parameters.Add(new SqlParameter("@score", score));
             command.Parameters.Add(new SqlParameter("@matchDate", matchDate));
+            command.Parameters.Add(new SqlParameter("@gameOver", gameOverInt));
 
             connection.Open();
 
@@ -576,7 +565,6 @@ namespace Tetris
             connection.Close();
         }
 
-        
         void ReceiveGameDataFromDB()
         {
             string connectionString = "Data Source=SQO-197;Initial Catalog=TetrisDB;Persist Security Info=True;User ID=sa;Password=sequor";
@@ -643,7 +631,6 @@ namespace Tetris
 
             command.Dispose();
             connection.Close();
-
         }
 
         private void LoadGame(SqlConnection connection,int gameID)
@@ -657,41 +644,42 @@ namespace Tetris
             {
                 while (reader.Read())
                 {
-                    int tempScore = (int)reader["Score"];
-                    score = tempScore;
-                    UpdateScoreCounter(score);
-                    string tempGameBoard = reader["GameBoard"].ToString();
-                    Console.WriteLine(tempGameBoard.ToString());
-                    ConvertBoardFromDB(tempGameBoard);
+                    int tempGameOverInt = (int)(reader["GameOver"]);
+                    if (tempGameOverInt == 0)
+                    {
+                        Console.WriteLine(tempGameOverInt);
+                        int tempScore = (int)reader["Score"];
+                        score = tempScore;
+                        UpdateScoreCounter(score);
+                        string tempGameBoard = reader["GameBoard"].ToString();
+                        Console.WriteLine(tempGameBoard.ToString());
+                        ConvertBoardFromDB(tempGameBoard);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Can't load game");
+                    }
                     return;
                 }
             }
-
             command.Dispose();
             connection.Close();
-
-
         }
 
         private void ConvertBoardFromDB(string tempGameBoard)
         {
             boardGridStringArray = tempGameBoard.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            PrintBoardGrid();
-
             int boardGridIndex = 0;
+
             for (int i = 0; i < gridArray.GetLength(0); i++)
             {
                 for (int j = 0; j < gridArray.GetLength(1); j++)
                 {
-
                     gridArray[i, j] = int.Parse(boardGridStringArray[boardGridIndex]);
-
                     boardGridIndex++;
                 }
-                //Console.WriteLine(i);
             }
-            //PrintBoardGrid();
-            PrintGridDotArray();
+
             UpdateBitmap();
         }
     }

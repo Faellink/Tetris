@@ -40,7 +40,6 @@ namespace Tetris
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.txtGameSaved = new System.Windows.Forms.TextBox();
             this.lblIdText = new System.Windows.Forms.Label();
             this.txtIdGameToLoad = new System.Windows.Forms.TextBox();
             this.btnLoad = new System.Windows.Forms.Button();
@@ -132,7 +131,6 @@ namespace Tetris
             // 
             // panel4
             // 
-            this.panel4.Controls.Add(this.txtGameSaved);
             this.panel4.Controls.Add(this.lblIdText);
             this.panel4.Controls.Add(this.txtIdGameToLoad);
             this.panel4.Controls.Add(this.btnLoad);
@@ -141,15 +139,6 @@ namespace Tetris
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(204, 204);
             this.panel4.TabIndex = 7;
-            // 
-            // txtGameSaved
-            // 
-            this.txtGameSaved.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtGameSaved.Location = new System.Drawing.Point(44, 42);
-            this.txtGameSaved.Name = "txtGameSaved";
-            this.txtGameSaved.ReadOnly = true;
-            this.txtGameSaved.Size = new System.Drawing.Size(124, 13);
-            this.txtGameSaved.TabIndex = 11;
             // 
             // lblIdText
             // 
@@ -227,7 +216,6 @@ namespace Tetris
         private System.Windows.Forms.TextBox txtIdGameToLoad;
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.TextBox txtGameSaved;
     }
 }
 
