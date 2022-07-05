@@ -49,6 +49,8 @@ namespace Tetris
             Paused
         }
 
+        public Connection connectionToSql;
+
         string[] boardGridStringArray;
         DateTime matchDate;
 

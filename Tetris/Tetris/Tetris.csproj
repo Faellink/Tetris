@@ -61,6 +61,7 @@
     <Compile Include="BlockUserControl.Designer.cs">
       <DependentUpon>BlockUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Connection.cs" />
     <Compile Include="IBlock.cs">
       <SubType>UserControl</SubType>
     </Compile>
