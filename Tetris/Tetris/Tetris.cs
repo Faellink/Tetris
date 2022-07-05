@@ -61,6 +61,8 @@ namespace Tetris
             InitializeComponent();
             LoadGame();
 
+            //connectionToSql = new Connection();
+
             boardGridStringArray = new string[(gridHeight * gridWidth)];
             Console.WriteLine(boardGridStringArray.Length);
         }
@@ -538,59 +540,74 @@ namespace Tetris
 
         private void SendGameDataToDB(string[] boardGridStringArray, int score, DateTime matchDate,int gameOverInt)
         {
+            connectionToSql = new Connection();
 
             var stringBoard = String.Join("", boardGridStringArray);
 
-            string connectionString = "Data Source=SQO-197;Initial Catalog=TetrisDB;Persist Security Info=True;User ID=sa;Password=sequor";
+            //string connectionString = "Data Source=SQO-197;Initial Catalog=TetrisDB;Persist Security Info=True;User ID=sa;Password=sequor";
 
-            SqlConnection connection = new SqlConnection(connectionString);
+            //SqlConnection connection = new SqlConnection(connectionString);
 
-            string sql = "INSERT INTO TetrisGameResults(GameBoard, Score, MatchDate, GameOver)" + "VALUES (@gameBoard, @score, @matchDate, @gameOver)";
+            string sql = "INSERT INTO TetrisGameResults(GameBoard, Score, MatchDate, GameOver) VALUES ('" + stringBoard + "', '" + score + "', '" + matchDate + "', '" + gameOverInt + "')";
 
-            SqlCommand command = new SqlCommand(sql, connection);
+            //SqlCommand command = new SqlCommand(sql, connection);
 
-            command.Parameters.Add(new SqlParameter("@gameBoard", stringBoard));
-            command.Parameters.Add(new SqlParameter("@score", score));
-            command.Parameters.Add(new SqlParameter("@matchDate", matchDate));
-            command.Parameters.Add(new SqlParameter("@gameOver", gameOverInt));
+            connectionToSql.SQLCommand(sql);
 
-            connection.Open();
+            //command.Parameters.Add(new SqlParameter("@gameBoard", stringBoard));
+            //command.Parameters.Add(new SqlParameter("@score", score));
+            //command.Parameters.Add(new SqlParameter("@matchDate", matchDate));
+            //command.Parameters.Add(new SqlParameter("@gameOver", gameOverInt));
 
-            int result = command.ExecuteNonQuery();
 
-            if (result < 0)
-            {
-                MessageBox.Show("Error inserting data into DataBase");
-            }
+            //connection.Open();
 
-            command.Dispose();
-            connection.Close();
+            //int result = command.ExecuteNonQuery();
+
+            //if (result < 0)
+            //{
+            //    MessageBox.Show("Error inserting data into DataBase");
+            //}
+
+            //command.Dispose();
+            connectionToSql.Close();
         }
 
         void ReceiveGameDataFromDB()
         {
-            string connectionString = "Data Source=SQO-197;Initial Catalog=TetrisDB;Persist Security Info=True;User ID=sa;Password=sequor";
-            SqlConnection connection = new SqlConnection(connectionString);
+            connectionToSql = new Connection();
 
-            connection.Open();
+            //string connectionString = "Data Source=SQO-197;Initial Catalog=TetrisDB;Persist Security Info=True;User ID=sa;Password=sequor";
+            //SqlConnection connection = new SqlConnection(connectionString);
+
+            //connection.Open();
 
             string sql = "SELECT TOP 1(GameID) FROM TetrisGameResults ORDER BY GameID DESC";
-            SqlCommand command = new SqlCommand(sql, connection);
+            //SqlCommand command = new SqlCommand(sql, connection);
 
-            SqlDataReader reader = command.ExecuteReader();
+            var data = connectionToSql.SQLQuery(sql);
 
-            if (reader != null)
+            if (data.Rows.Count>0)
             {
-                while (reader.Read())
-                {
-                    var tempGameId = reader.GetInt32(0).ToString();
-                    MessageBox.Show($"Saved as GameID {tempGameId}.\nUse this ID to Load your game and resume playing!");
-                    return;
-                }
+                var tempGameID = data.Rows[0][0].ToString();
+                MessageBox.Show($"Saved as GameID {tempGameID}.\nUse this ID to Load your game and resume playing!");
+                //MessageBox.Show("yes");
             }
 
-            command.Dispose();
-            connection.Close();
+            //SqlDataReader reader = command.ExecuteReader();
+
+            //if (reader != null)
+            //{
+            //    while (reader.Read())
+            //    {
+            //        var tempGameId = reader.GetInt32(0).ToString();
+            //        MessageBox.Show($"Saved as GameID {tempGameId}.\nUse this ID to Load your game and resume playing!");
+            //        return;
+            //    }
+            //}
+
+            //command.Dispose();
+            connectionToSql.Close();
         }
 
         private void LoadButtonCLick(object sender, EventArgs e)
@@ -602,37 +619,93 @@ namespace Tetris
 
         private void CheckGameIdOnDB(int gameID)
         {
-            string connectionString = "Data Source=SQO-197;Initial Catalog=TetrisDB;Persist Security Info=True;User ID=sa;Password=sequor";
-            SqlConnection connection = new SqlConnection(connectionString);
+            connectionToSql = new Connection();
 
-            connection.Open();
+            //string connectionString = "Data Source=SQO-197;Initial Catalog=TetrisDB;Persist Security Info=True;User ID=sa;Password=sequor";
+            //SqlConnection connection = new SqlConnection(connectionString);
 
-            string sql = ($"SELECT COUNT(*) FROM TetrisGameResults WHERE GameID = {gameID}");
-            SqlCommand command = new SqlCommand(sql, connection);
+            //connection.Open();
 
-            SqlDataReader reader = command.ExecuteReader();
+            //string sql = "SELECT COUNT(*) FROM TetrisGameResults WHERE GameID = '" + gameID + "'";
 
-            if (reader != null)
+            string sql = "SELECT * FROM TetrisGameResults WHERE GameID = '" + gameID + "'";
+            //SqlCommand command = new SqlCommand(sql, connection);
+
+            //SqlDataReader reader = command.ExecuteReader();
+
+            var data = connectionToSql.SQLQuery(sql);
+
+            //Console.WriteLine(data.Rows.Count);
+
+            if (data.Rows.Count > 0)
             {
-                while (reader.Read())
-                {
-                    var tempGameId = reader.GetInt32(0);
-                    if (tempGameId == 1)
-                    {
-                        reader.Close();
-                        Console.WriteLine("game found");
-                        LoadGame(connection,gameID);
-                    }
-                    else
-                    {
-                        Console.WriteLine("game not found");
-                    }
-                    return;
-                }
+                //var tempGameID = (int)(data.Rows[0][0]);
+
+                //if (tempGameID == 1)
+                //{
+                //    //Console.WriteLine("game found");
+                //    //LoadGame(connection,gameID);
+                //    //LoadGameSQL(data);
+                //}
+                //else
+                //{
+                //    //Console.WriteLine("game not found");
+
+                //}
+                Console.WriteLine("game found");
+                LoadGameSQL(data);
+
+            }
+            else
+            {
+                Console.WriteLine("game not found");
             }
 
-            command.Dispose();
-            connection.Close();
+            //if (reader != null)
+            //{
+            //    while (reader.Read())
+            //    {
+            //        var tempGameId = reader.GetInt32(0);
+            //        if (tempGameId == 1)
+            //        {
+            //            reader.Close();
+            //            Console.WriteLine("game found");
+            //            LoadGame(connection,gameID);
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine("game not found");
+            //        }
+            //        return;
+            //    }
+            //}
+
+            //command.Dispose();
+            connectionToSql.Close();
+        }
+
+        private void LoadGameSQL(DataTable data)
+        {
+            var temGameOver = (int)data.Rows[0]["GameOver"];
+            //Console.WriteLine($"GameOVer: {temGameOver}"); 
+            if (temGameOver == 0)
+            {
+                Console.WriteLine(temGameOver);
+                //int tempScore = (int)reader["Score"];
+                int tempScore = (int)data.Rows[0]["Score"];
+                score = tempScore;
+                UpdateScoreCounter(score);
+                //string tempGameBoard = reader["GameBoard"].ToString();
+                string tempGameBoard = data.Rows[0]["GameBoard"].ToString();
+                Console.WriteLine(tempGameBoard.ToString());
+                ConvertBoardFromDB(tempGameBoard);
+            }
+            else
+            {
+                MessageBox.Show("Can't load game");
+            }
+            return;
+
         }
 
         private void LoadGame(SqlConnection connection,int gameID)
