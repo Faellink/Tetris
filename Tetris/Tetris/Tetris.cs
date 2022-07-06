@@ -557,7 +557,7 @@ namespace Tetris
 
             if (data.Rows.Count > 0)
             {
-                LoadGameSQL(data);
+                LoadGameDataFromDT(data);
             }
             else
             {
@@ -566,7 +566,7 @@ namespace Tetris
             connectionToSql.Close();
         }
 
-        private void LoadGameSQL(DataTable data)
+        private void LoadGameDataFromDT(DataTable data)
         {
             var temGameOver = (int)data.Rows[0]["GameOver"];
 
@@ -576,7 +576,7 @@ namespace Tetris
                 score = tempScore;
                 UpdateScoreCounter(score);
                 string tempGameBoard = data.Rows[0]["GameBoard"].ToString();
-                ConvertBoardFromDB(tempGameBoard);
+                ConvertBoardToGridArray(tempGameBoard);
             }
             else
             {
@@ -585,7 +585,7 @@ namespace Tetris
             return;
         }
 
-        private void ConvertBoardFromDB(string tempGameBoard)
+        private void ConvertBoardToGridArray(string tempGameBoard)
         {
             boardGridStringArray = tempGameBoard.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             int boardGridIndex = 0;
@@ -600,5 +600,6 @@ namespace Tetris
             }
             UpdateBitmap();
         }
+
     }
 }

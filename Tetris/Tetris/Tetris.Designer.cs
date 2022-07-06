@@ -30,6 +30,7 @@ namespace Tetris
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TetrisForm));
             this.btnStart = new System.Windows.Forms.Button();
             this.btnRestart = new System.Windows.Forms.Button();
             this.btnPause = new System.Windows.Forms.Button();
@@ -53,7 +54,7 @@ namespace Tetris
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(68, 13);
+            this.btnStart.Location = new System.Drawing.Point(11, 14);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 1;
@@ -64,7 +65,7 @@ namespace Tetris
             // 
             // btnRestart
             // 
-            this.btnRestart.Location = new System.Drawing.Point(68, 42);
+            this.btnRestart.Location = new System.Drawing.Point(11, 43);
             this.btnRestart.Name = "btnRestart";
             this.btnRestart.Size = new System.Drawing.Size(75, 23);
             this.btnRestart.TabIndex = 2;
@@ -75,7 +76,7 @@ namespace Tetris
             // 
             // btnPause
             // 
-            this.btnPause.Location = new System.Drawing.Point(68, 71);
+            this.btnPause.Location = new System.Drawing.Point(11, 72);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(75, 23);
             this.btnPause.TabIndex = 3;
@@ -87,7 +88,7 @@ namespace Tetris
             // lblScore
             // 
             this.lblScore.AutoSize = true;
-            this.lblScore.Location = new System.Drawing.Point(42, 16);
+            this.lblScore.Location = new System.Drawing.Point(14, 16);
             this.lblScore.Name = "lblScore";
             this.lblScore.Size = new System.Drawing.Size(44, 13);
             this.lblScore.TabIndex = 0;
@@ -112,38 +113,41 @@ namespace Tetris
             // 
             // panel2
             // 
+            this.panel2.BackColor = System.Drawing.Color.Ivory;
             this.panel2.Controls.Add(this.btnRestart);
             this.panel2.Controls.Add(this.btnStart);
             this.panel2.Controls.Add(this.btnPause);
-            this.panel2.Location = new System.Drawing.Point(385, 78);
+            this.panel2.Location = new System.Drawing.Point(440, 89);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(204, 111);
+            this.panel2.Size = new System.Drawing.Size(96, 111);
             this.panel2.TabIndex = 6;
             // 
             // panel3
             // 
+            this.panel3.BackColor = System.Drawing.Color.Ivory;
             this.panel3.Controls.Add(this.lblScore);
-            this.panel3.Location = new System.Drawing.Point(385, 28);
+            this.panel3.Location = new System.Drawing.Point(401, 39);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(204, 44);
+            this.panel3.Size = new System.Drawing.Size(174, 44);
             this.panel3.TabIndex = 0;
             this.panel3.TabStop = true;
             // 
             // panel4
             // 
+            this.panel4.BackColor = System.Drawing.Color.Ivory;
             this.panel4.Controls.Add(this.lblIdText);
             this.panel4.Controls.Add(this.txtIdGameToLoad);
             this.panel4.Controls.Add(this.btnLoad);
             this.panel4.Controls.Add(this.btnSave);
-            this.panel4.Location = new System.Drawing.Point(385, 195);
+            this.panel4.Location = new System.Drawing.Point(411, 206);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(204, 204);
+            this.panel4.Size = new System.Drawing.Size(150, 151);
             this.panel4.TabIndex = 7;
             // 
             // lblIdText
             // 
             this.lblIdText.AutoSize = true;
-            this.lblIdText.Location = new System.Drawing.Point(42, 65);
+            this.lblIdText.Location = new System.Drawing.Point(14, 67);
             this.lblIdText.Name = "lblIdText";
             this.lblIdText.Size = new System.Drawing.Size(126, 13);
             this.lblIdText.TabIndex = 10;
@@ -151,7 +155,7 @@ namespace Tetris
             // 
             // txtIdGameToLoad
             // 
-            this.txtIdGameToLoad.Location = new System.Drawing.Point(44, 90);
+            this.txtIdGameToLoad.Location = new System.Drawing.Point(16, 92);
             this.txtIdGameToLoad.Name = "txtIdGameToLoad";
             this.txtIdGameToLoad.Size = new System.Drawing.Size(124, 20);
             this.txtIdGameToLoad.TabIndex = 9;
@@ -159,7 +163,7 @@ namespace Tetris
             // 
             // btnLoad
             // 
-            this.btnLoad.Location = new System.Drawing.Point(67, 116);
+            this.btnLoad.Location = new System.Drawing.Point(39, 118);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(75, 23);
             this.btnLoad.TabIndex = 8;
@@ -170,7 +174,7 @@ namespace Tetris
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(68, 17);
+            this.btnSave.Location = new System.Drawing.Point(40, 19);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 0;
@@ -183,11 +187,13 @@ namespace Tetris
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Ivory;
             this.ClientSize = new System.Drawing.Size(616, 448);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "TetrisForm";
             this.Text = "TETRIS";
             this.panel1.ResumeLayout(false);
