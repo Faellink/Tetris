@@ -142,7 +142,6 @@ namespace Tetris
         private BlockUserControl[] ShuffleBlocksArray(BlockUserControl[] blocks)
         {
             Random random = new Random();
-
             Array.Copy(blocks, shuffledBlockArray, blocks.Length);
 
             for (int i = shuffledBlockArray.Length - 1; i > 0; i--)
@@ -152,17 +151,14 @@ namespace Tetris
                 shuffledBlockArray[i] = shuffledBlockArray[j];
                 shuffledBlockArray[j] = temp;
             }
-
             return shuffledBlockArray;
         }
 
         private BlockUserControl GetRandomBlock()
         {
             var block = shuffledBlockArray[blocksGenerated];
-
             currentPositionX = 4;
             currentPositionY = -block.BlockHeight;
-
             blocksGenerated++;
 
             if (blocksGenerated==7)
@@ -170,7 +166,6 @@ namespace Tetris
                 ShuffleBlocksArray(shuffledBlockArray);
                 blocksGenerated = 0;
             }
-
             return block;
         }
 
@@ -190,10 +185,8 @@ namespace Tetris
                         return false;
                 }
             }
-
             currentPositionX = newX;
             currentPositionY = newY;
-
             DrawBlock();
 
             return true;
@@ -212,7 +205,6 @@ namespace Tetris
                         workingGraphics.FillRectangle(currentBlock.BlockColor, (currentPositionX + i) * blockGraphicSize, (currentPositionY + j) * blockGraphicSize, blockGraphicSize, blockGraphicSize);
                 }
             }
-
             picTetris.Image = workingBitmap;
         }
 
@@ -414,7 +406,6 @@ namespace Tetris
         private void RestartButtonClick(object sender, EventArgs e)
         {
             ResetGridArray();
-
             currentBlock = GetRandomBlock();
             gameTimer.Interval = 500;
             score = 0;
@@ -425,18 +416,13 @@ namespace Tetris
 
         private void GameOver()
         {
-
             ResetGridArray();
-
             gameTimer.Stop();
             gameTimer.Tick -= TimerTick;
             gameTimer.Dispose();
-
             btnRestart.Enabled = false;
-
             btnPause.Enabled = false;
             btnPause.Text = "PAUSE";
-
             btnStart.Enabled = true;
         }
 
@@ -513,7 +499,6 @@ namespace Tetris
                     gridArray[i, j] = 0;
                 }
             }
-
             UpdateBitmap();
         }
 
@@ -529,7 +514,6 @@ namespace Tetris
                     boardGridIndex++;
                 }
             }
-
             SendGameDataToDB(boardGridStringArray,score, matchDate,0);
             ReceiveGameDataFromDB();
         }
@@ -556,7 +540,6 @@ namespace Tetris
                 var tempGameID = data.Rows[0][0].ToString();
                 MessageBox.Show($"Saved as GameID {tempGameID}.\nUse this ID to Load your game and resume playing!");
             }
-
             connectionToSql.Close();
         }
 
