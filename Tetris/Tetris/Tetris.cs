@@ -14,16 +14,21 @@ namespace Tetris
     public partial class TetrisForm : Form
     {
 
+        public enum MANIPULA_TABULEIRO
+        {
+            LIMPA_4_LINHAS = 4
+        }
+
         private static BlockUserControl[] blocksArray = new BlockUserControl[] { new OBlock(), new IBlock(), new TBlock(),
                                                                                  new LBlock(), new JBlock(), new SBlock(), 
                                                                                  new ZBlock() };
 
         private static BlockUserControl[] shuffledBlockArray = new BlockUserControl[blocksArray.Length];
 
-        BlockUserControl currentBlock;
+        private BlockUserControl currentBlock;
 
-        Bitmap bitmap;
-        Graphics graphics;
+        private Bitmap bitmap;
+        private Graphics graphics;
 
         Bitmap workingBitmap;
         Graphics workingGraphics;
@@ -93,29 +98,6 @@ namespace Tetris
             gridArray = new int[gridHeight, gridWidth];
         }
 
-        public void GameStateSwitch(GameState state)
-        {
-            switch (state)
-            {
-                case GameState.Unpaused:
-                    isPaused = false;
-                    btnSave.Enabled = false;
-                    btnLoad.Enabled = false;
-                    txtIdGameToLoad.ReadOnly = true;
-                    gameTimer.Start();
-                    btnPause.Text = "PAUSE";
-                    break;
-                case GameState.Paused:
-                    isPaused = true;
-                    btnSave.Enabled = true;
-                    btnLoad.Enabled = true;
-                    txtIdGameToLoad.ReadOnly = false;
-                    gameTimer.Stop();
-                    btnPause.Text = "RESUME";
-                    break;
-            }
-        }
-
         public void StartGame()
         {
 
@@ -139,6 +121,33 @@ namespace Tetris
             gameTimer.Start();
         }
 
+        public void GameStateSwitch(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.Unpaused:
+                    {
+                        isPaused = false;
+                        btnSave.Enabled = false;
+                        btnLoad.Enabled = false;
+                        txtIdGameToLoad.ReadOnly = true;
+                        gameTimer.Start();
+                        btnPause.Text = "PAUSE";
+                        break;
+                    }
+                case GameState.Paused:
+                    {
+                        isPaused = true;
+                        btnSave.Enabled = true;
+                        btnLoad.Enabled = true;
+                        txtIdGameToLoad.ReadOnly = false;
+                        gameTimer.Stop();
+                        btnPause.Text = "RESUME";
+                        break;
+                    }
+            }
+        }
+
         private BlockUserControl[] ShuffleBlocksArray(BlockUserControl[] blocks)
         {
             Random random = new Random();
@@ -151,6 +160,7 @@ namespace Tetris
                 shuffledBlockArray[i] = shuffledBlockArray[j];
                 shuffledBlockArray[j] = temp;
             }
+
             return shuffledBlockArray;
         }
 
@@ -259,7 +269,7 @@ namespace Tetris
                     ClearFullRow(Row,Column);
                     clearedRows++;
                     
-                    if (clearedRows==4)
+                    if (clearedRows == (int)MANIPULA_TABULEIRO.LIMPA_4_LINHAS)
                     {
                         UpdateScoreCounter(500);
                     }
@@ -416,6 +426,7 @@ namespace Tetris
 
         private void GameOver()
         {
+            ResetBoardgridArray();
             ResetGridArray();
             gameTimer.Stop();
             gameTimer.Tick -= TimerTick;
@@ -477,19 +488,6 @@ namespace Tetris
             }
         }
 
-        //public void PrintGridDotArray()
-        //{
-        //    for (int i = 0; i < gridArray.GetLength(0); i++)
-        //    {
-        //        for (int j = 0; j < gridArray.GetLength(1); j++)
-        //        {
-        //            Console.Write(gridArray[i, j]);
-        //        }
-        //        Console.WriteLine();
-        //    }
-        //    Console.WriteLine("/////////");
-        //}
-
         private void ResetGridArray()
         {
             for (int i = 0; i < gridArray.GetLength(0); i++)
@@ -500,6 +498,14 @@ namespace Tetris
                 }
             }
             UpdateBitmap();
+        }
+
+        private void ResetBoardgridArray()
+        {
+            for (int i = 0; i < boardGridStringArray.Length; i++)
+            {
+                boardGridStringArray[i] = "0,";
+            }
         }
 
         private void SaveButtonClick(object sender, EventArgs e)
@@ -529,7 +535,7 @@ namespace Tetris
             connectionToSql.Close();
         }
 
-        void ReceiveGameDataFromDB()
+        private void ReceiveGameDataFromDB()
         {
             connectionToSql = new Connection();
             string sql = "SELECT TOP 1(GameID) FROM TetrisGameResults ORDER BY GameID DESC";
