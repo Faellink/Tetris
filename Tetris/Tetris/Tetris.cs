@@ -510,7 +510,7 @@ namespace Tetris
             {
                 for (int j = 0; j < gridArray.GetLength(1); j++)
                 {
-                    boardGridStringArray[boardGridIndex] += gridArray[i, j] + ","; 
+                    boardGridStringArray[boardGridIndex] = gridArray[i, j] + ","; 
                     boardGridIndex++;
                 }
             }
